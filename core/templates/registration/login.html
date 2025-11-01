@@ -86,70 +86,73 @@
 
     <style type="text/css">
       :root {
-        --background: hsl(220, 20%, 97%);
-        --foreground: hsl(222, 30%, 15%);
+        /* --- NEW: NEON MINT THEME --- */
+        --background: hsl(220, 15%, 97%);
+        --foreground: hsl(222, 20%, 25%);
         --card: hsl(0, 0%, 100%);
-        --card-foreground: hsl(222, 30%, 15%);
+        --card-foreground: hsl(222, 20%, 25%);
         --popover: hsl(0, 0%, 100%);
-        --popover-foreground: hsl(222, 30%, 15%);
+        --popover-foreground: hsl(222, 20%, 25%);
         
-        --primary-light: hsl(210, 100%, 80%);
-        --primary: hsl(210, 100%, 50%);
-        --primary-dark: hsl(260, 100%, 55%);
+        --primary-light: hsl(145, 90%, 80%);
+        --primary: hsl(145, 70%, 45%); /* Main Minty Green */
+        --primary-dark: hsl(160, 80%, 35%); /* Dark Teal for gradient */
         --primary-foreground: hsl(0, 0%, 100%);
 
-        --secondary-light: hsl(186, 100%, 80%);
-        --secondary: hsl(186, 100%, 38%);
-        --secondary-dark: hsl(186, 100%, 28%);
+        --secondary-light: hsl(220, 25%, 80%);
+        --secondary: hsl(220, 30%, 50%);
+        --secondary-dark: hsl(220, 30%, 40%);
         --secondary-foreground: hsl(0, 0%, 100%);
         
         --muted: hsl(220, 20%, 94%);
-        --muted-foreground: hsl(215, 16%, 47%);
-        --accent: hsl(36, 100%, 50%);
-        --accent-foreground: hsl(222, 30%, 15%);
+        --muted-foreground: hsl(220, 15%, 45%);
+        --accent: hsl(135, 90%, 50%);
+        --accent-foreground: hsl(222, 20%, 25%);
         --destructive: hsl(0, 84%, 60%);
         --destructive-foreground: hsl(0, 0%, 100%);
         --border: hsl(220, 20%, 90%);
         --input: hsl(220, 20%, 90%);
-        --ring: hsl(210, 100%, 50%);
+        --ring: hsl(145, 70%, 45%);
         
         --font-sans: "Inter", "system-ui", sans-serif;
         --font-serif: Georgia, serif;
         --font-mono: Menlo, monospace;
-        --radius: 12px;
-        --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-        --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
-        --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-        --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+        --radius: 10px; /* NEW: Sharper */
+        --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.04);
+        --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.07), 0 1px 2px -1px rgb(0 0 0 / 0.07);
+        --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.07), 0 2px 4px -2px rgb(0 0 0 / 0.07);
+        --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.07), 0 4px 6px -4px rgb(0 0 0 / 0.07);
         --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+        --shadow-2xl: 0 25px 50px -12px rgb(0 0 0 / 0.2);
       }
       .dark {
-        --background: hsl(222, 30%, 10%);
+        /* --- NEW: DARK MODE VARIANTS --- */
+        --background: hsl(222, 30%, 12%);
         --foreground: hsl(210, 20%, 90%);
-        --card: hsl(222, 30%, 13%);
+        --card: hsl(222, 30%, 15%);
         --card-foreground: hsl(210, 20%, 90%);
-        --popover: hsl(222, 30%, 10%);
+        --popover: hsl(222, 30%, 12%);
         --popover-foreground: hsl(210, 20%, 90%);
         
-        --primary-light: hsl(210, 100%, 70%);
-        --primary: hsl(210, 100%, 60%);
-        --primary-dark: hsl(260, 100%, 65%);
-        --primary-foreground: hsl(0, 0%, 100%);
+        --primary-light: hsl(145, 70%, 55%);
+        --primary: hsl(145, 70%, 50%);
+        --primary-dark: hsl(150, 70%, 60%);
+        --primary-foreground: hsl(145, 100%, 10%);
         
-        --secondary-light: hsl(186, 100%, 70%);
-        --secondary: hsl(186, 100%, 48%);
-        --secondary-dark: hsl(186, 100%, 38%);
+        --secondary-light: hsl(220, 20%, 60%);
+        --secondary: hsl(220, 25%, 50%);
+        --secondary-dark: hsl(220, 25%, 40%);
         --secondary-foreground: hsl(0, 0%, 100%);
 
-        --muted: hsl(222, 30%, 18%);
+        --muted: hsl(222, 30%, 20%);
         --muted-foreground: hsl(215, 16%, 55%);
-        --accent: hsl(36, 100%, 60%);
+        --accent: hsl(135, 90%, 55%);
         --accent-foreground: hsl(210, 20%, 90%);
         --destructive: hsl(0, 84%, 70%);
         --destructive-foreground: hsl(0, 0%, 100%);
         --border: hsl(222, 30%, 25%);
         --input: hsl(222, 30%, 25%);
-        --ring: hsl(210, 100%, 60%);
+        --ring: hsl(145, 70%, 50%);
       }
       body {
         font-family: var(--font-sans), system-ui, sans-serif;
@@ -159,6 +162,7 @@
       
       .btn-primary {
         color: var(--primary-foreground);
+        font-weight: 600; /* NEW */
         background: linear-gradient(
           60deg, 
           var(--primary), 
@@ -169,9 +173,13 @@
         animation: gradient-animation 8s ease-in-out infinite;
         transition: all 0.3s ease-in-out;
       }
+      .dark .btn-primary {
+         color: var(--primary-foreground);
+      }
       .btn-primary:hover {
         transform: translateY(-4px) scale(1.05);
         box-shadow: var(--shadow-xl);
+        filter: brightness(1.1); /* NEW */
       }
 
       /* --- Custom Form Input Style --- */
@@ -180,7 +188,7 @@
         border: 1px solid var(--border);
         color: var(--foreground);
         border-radius: var(--radius);
-        padding: 0.75rem 1rem;
+        padding: 0.6rem 1rem; /* NEW: Reduced padding */
         font-size: 0.875rem;
         transition: all 0.3s ease-in-out;
         box-shadow: var(--shadow-sm);
@@ -191,17 +199,17 @@
         box-shadow: 0 0 0 3px var(--primary-light);
       }
       .dark .form-input:focus {
-         box-shadow: 0 0 0 3px hsl(210, 100%, 60%, 0.3);
+         box-shadow: 0 0 0 3px hsl(145, 70%, 45%, 0.3);
       }
       
       /* --- Animated Gradient Background --- */
       .animated-gradient-bg {
         background: linear-gradient(
           -45deg, 
-          hsl(210, 100%, 70%), 
-          hsl(260, 100%, 80%), 
-          hsl(186, 100%, 70%),
-          hsl(36, 100%, 70%)
+          hsl(145, 70%, 70%), /* NEW */
+          hsl(160, 80%, 60%), /* NEW */
+          hsl(180, 50%, 70%), /* NEW */
+          hsl(145, 70%, 70%) /* NEW */
         );
         background-size: 400% 400%;
         animation: gradient-pulse 15s ease-in-out infinite;
@@ -209,10 +217,10 @@
       .dark .animated-gradient-bg {
          background: linear-gradient(
           -45deg, 
-          hsl(210, 100%, 20%), 
-          hsl(260, 100%, 25%), 
-          hsl(186, 100%, 15%),
-          hsl(222, 30%, 10%)
+          hsl(145, 70%, 20%), /* NEW */
+          hsl(160, 80%, 15%), /* NEW */
+          hsl(180, 50%, 20%), /* NEW */
+          hsl(222, 30%, 12%)
         );
         background-size: 400% 400%;
         animation: gradient-pulse 15s ease-in-out infinite;
@@ -227,7 +235,7 @@
         box-shadow: var(--shadow-2xl);
       }
       .dark .glass-card {
-         background: hsla(222, 30%, 13%, 0.6);
+         background: hsla(222, 30%, 15%, 0.6);
          border: 1px solid hsla(222, 30%, 25%, 0.5);
       }
 
@@ -301,9 +309,8 @@
 
             <button 
                 type="submit" 
-                class="btn-primary w-full px-4 py-3 rounded-lg text-sm font-semibold mt-8 tracking-wide"
-            >
-                Login
+                class="btn-primary w-full px-4 py-2.5 rounded-lg text-sm font-semibold mt-8 tracking-wide"
+            > Login
             </button>
              <input type="hidden" name="next" value="{{ next }}">
         </form>

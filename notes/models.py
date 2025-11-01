@@ -4,7 +4,30 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 from categories.models import Category # Import the Category model
 from django.urls import reverse
 from django.db.models import Avg
+from django.utils.text import slugify # --- NEW: Import slugify
 
+# ---
+# NEW: "VILLAIN ARC" TAG MODEL
+# ---
+class Tag(models.Model):
+    name = models.CharField(max_length=100, unique=True)
+    slug = models.SlugField(max_length=100, unique=True, blank=True)
+
+    class Meta:
+        ordering = ['name']
+
+    def __str__(self):
+        return self.name
+
+    def save(self, *args, **kwargs):
+        # Auto-generate slug from name if it's blank
+        if not self.slug:
+            self.slug = slugify(self.name)
+        super().save(*args, **kwargs)
+
+# ---
+# NOTE MODEL (Updated)
+# ---
 class Note(models.Model):
     title = models.CharField(max_length=255)
     description = models.TextField(blank=True, null=True)
@@ -23,6 +46,13 @@ class Note(models.Model):
         blank=True, 
         related_name="notes"
     )
+    # --- NEW: TAGS FIELD ---
+    tags = models.ManyToManyField(
+        Tag, 
+        blank=True, 
+        related_name="notes"
+    )
+    # --- END NEW FIELD ---
     
     # Status & Rating
     is_public = models.BooleanField(default=True, help_text="Allow anyone (even guests) to see this note.")
@@ -56,6 +86,9 @@ class Note(models.Model):
         self.total_ratings = ratings_data['count'] or 0
         self.save()
 
+# ---
+# RATING MODEL (Unchanged)
+# ---
 class Rating(models.Model):
     note = models.ForeignKey(Note, on_delete=models.CASCADE, related_name='ratings')
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='ratings')

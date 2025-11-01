@@ -5,15 +5,33 @@
 {% block page_title %}{{ form_title|default:"Note Form" }}{% endblock %}
 
 {% block content %}
-<div class="bg-card p-6 md:p-8 rounded-2xl shadow-lg border border-border max-w-4xl mx-auto animate-fade-in-up">
+<div class="bento-card p-6 md:p-8 rounded-lg max-w-4xl mx-auto animate-fade-in-up">
   
-  <form method="post" enctype="multipart/form-data">
+  <form method="post" enctype="multipart/form-data" 
+        x-data="{
+          isDragging: false,
+          fileName: '{{ object.file.name|cut:'notes/'|default:'' }}',
+          handleFileDrop(e) {
+            let files = e.dataTransfer.files;
+            if (files.length > 0) {
+              this.$refs.fileInput.files = files;
+              this.fileName = files[0].name;
+            }
+            this.isDragging = false;
+          },
+          handleFileSelect(e) {
+            let files = e.target.files;
+            if (files.length > 0) {
+              this.fileName = files[0].name;
+            }
+          }
+        }">
     {% csrf_token %}
     
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
       {% if form.non_field_errors %}
         {% for error in form.non_field_errors %}
-          <div class="md:col-span-2 bg-destructive/10 text-destructive text-sm p-3 rounded-lg">{{ error }}</div>
+          <div class="md:col-span-2 bg-destructive/20 text-destructive-foreground p-3 rounded-lg text-sm">{{ error }}</div>
         {% endfor %}
       {% endif %}
 
@@ -32,14 +50,49 @@
       </div>
       
       <div class="space-y-2">
+        <label for="{{ form.tags.id_for_label }}" class="block text-sm font-medium text-foreground mb-1">{{ form.tags.label }}</G</label>
+        {{ form.tags }}
+        {% if form.tags.help_text %}<p class="text-xs text-muted-foreground mt-1">{{ form.tags.help_text }}</p>{% endif %}
+        {% for error in form.tags.errors %}<div class="text-destructive text-xs mt-1">{{ error }}</div>{% endfor %}
+      </div>
+      <div class="space-y-2 md:col-span-2">
         <label for="{{ form.file.id_for_label }}" class="block text-sm font-medium text-foreground mb-1">{{ form.file.label }}</label>
+        
         {{ form.file }}
+        
+        <div
+          class="flex flex-col items-center justify-center p-6 border-2 border-dashed rounded-lg transition-all duration-300"
+          :class="{
+            'border-primary/80 bg-primary/10 scale-105 shadow-xl': isDragging,
+            'border-border/50 bg-background/70 hover:border-primary/50': !isDragging
+          }"
+          @dragover.prevent="isDragging = true"
+          @dragleave.prevent="isDragging = false"
+          @drop.prevent="handleFileDrop"
+          @click="$refs.fileInput.click()"
+        >
+          <template x-if="!fileName">
+            <div class="text-center cursor-pointer">
+              <i data-lucide="upload-cloud" class="w-12 h-12 text-primary mx-auto"></i>
+              <p class="mt-2 text-sm font-semibold text-foreground">Click to upload or drag & drop</p>
+              <p class="text-xs text-muted-foreground">PDF, DOCX, PPT, etc.</p>
+            </div>
+          </template>
+          <template x-if="fileName">
+            <div class="text-center cursor-pointer p-4">
+              <i data-lucide="check-circle" class="w-12 h-12 text-primary mx-auto"></i>
+              <p class="mt-2 text-sm font-semibold text-foreground truncate" x-text="fileName"></p>
+              <p class="text-xs text-muted-foreground">Click to replace file</p>
+            </div>
+          </template>
+        </div>
+        
         {% if form.file.help_text %}<p class="text-xs text-muted-foreground mt-1">{{ form.file.help_text }}</p>{% endif %}
         {% for error in form.file.errors %}<div class="text-destructive text-xs mt-1">{{ error }}</div>{% endfor %}
         
-        {% if object.file %}
+        {% if object.file and not fileName %}
         <p class="text-xs text-muted-foreground mt-1">
-          Currently: <a href="{{ object.file.url }}" target="_blank" class="text-primary hover:underline">{{ object.file.name }}</a>
+          Currently: <a href="{{ object.file.url }}" target="_blank" class="text-primary hover:underline">{{ object.file.name|cut:"notes/" }}</a>
         </p>
         {% endif %}
       </div>
@@ -51,7 +104,7 @@
         {% for error in form.description.errors %}<div class="text-destructive text-xs mt-1">{{ error }}</div>{% endfor %}
       </div>
       
-      <div class="space-y-2 md:col-span-2 flex items-center gap-x-3">
+      <div class="space-y-2 md:col-span-2 flex items-center gap-x-3 p-4 bg-background/70 rounded-lg border border-border/50">
         {{ form.is_public }}
         <div>
           <label for="{{ form.is_public.id_for_label }}" class="block text-sm font-medium text-foreground">{{ form.is_public.label }}</label>
@@ -62,7 +115,7 @@
 
     </div>
 
-    <div class="mt-8 pt-6 border-t border-border flex items-center gap-4">
+    <div class="mt-8 pt-6 border-t border-border/50 flex items-center gap-4">
       <button 
         type="submit" 
         class="btn-primary flex items-center gap-2 px-6 py-2 rounded-lg text-sm font-medium"
@@ -70,10 +123,39 @@
         <i data-lucide="save" class="w-4 h-4"></i>
         Save Note
       </button>
-      <a href="{{ object.get_absolute_url|default:request.META.HTTP_REFERER|default_if_none:request.build_absolute_uri|default:'/' }}" class="text-sm font-medium text-muted-foreground transition-all hover:text-primary hover:underline">
+      <a href="{{ request.META.HTTP_REFERER|default:'/' }}" class="text-sm font-medium text-muted-foreground transition-all hover:text-primary hover:underline">
         Cancel
       </a>
     </div>
   </form>
 </div>
+{% endblock %}
+
+
+{% block extra_js %}
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    // --- NEW: INITIALIZE TAGIFY ---
+    // Find the input field for tags
+    var input = document.getElementById('{{ form.tags.id_for_label }}');
+    
+    if (input) {
+      // Initialize Tagify on it
+      var tagify = new Tagify(input, {
+        // settings:
+        // delimiters: ",", // comma or "Enter"
+        // pattern: /^[a-z0-9\s-]{1,20}$/i, // tag validation
+        // You can add more settings here if you want
+        // See Tagify docs for all options
+      });
+    }
+  });
+
+  // Re-initialize icons if any are added dynamically (like the checkmark)
+  document.addEventListener('alpine:init', () => {
+    Alpine.effect(() => {
+      lucide.createIcons();
+    });
+  });
+</script>
 {% endblock %}

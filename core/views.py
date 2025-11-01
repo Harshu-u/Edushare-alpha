@@ -16,40 +16,38 @@ from django.db.models import Count, Avg
 def landing_view(request):
     if request.user.is_authenticated:
         return redirect('dashboard')
-    # We will create this template in the next batch
+    # This template was updated in the "Villain Arc"
     return render(request, 'core/landing.html')
 
 # View for the dashboard (requires login)
 @login_required
 def dashboard_view(request):
     
-    # --- 1. Top Stat Cards (EduShare Stats) ---
+    # --- "VILLAIN ARC" DATA QUERIES ---
+    
+    # 1. Top Stat Cards (Same as before)
     note_count = Note.objects.count()
     category_count = Category.objects.count()
     user_count = User.objects.filter(is_active=True).count()
     
-    # Calculate overall average rating
-    overall_avg_rating = Note.objects.aggregate(avg=Avg('average_rating'))['avg'] or 0.0
-    
-    # --- 2. Chart Data: Notes per Category ---
+    # 2. Chart Data: Notes per Category (Same as before)
     category_notes = Category.objects.annotate(count=Count('notes')).order_by('-count')
     cat_labels = json.dumps([c.name for c in category_notes])
     cat_data = json.dumps([c.count for c in category_notes])
 
-    # --- 3. Recent/Top Notes ---
+    # 3. Recent/Top Notes (Same as before)
     recent_notes = Note.objects.select_related('uploader', 'category').filter(is_public=True).order_by('-created_at')[:5]
     top_notes = Note.objects.select_related('uploader', 'category').filter(is_public=True).order_by('-average_rating')[:5]
 
-    # --- 4. Alerts & Quick Info (EduShare specific) ---
-    pending_teachers = User.objects.filter(role='teacher', is_active=False).count()
-    unrated_notes = Note.objects.filter(total_ratings=0).count()
-
+    # 4. --- NEW: LEADERBOARD DATA ---
+    # Get the top 5 users, ordered by their reputation
+    top_users = User.objects.filter(is_active=True).order_by('-reputation')[:5]
+    # --- END NEW DATA ---
 
     context = {
         'note_count': note_count,
         'category_count': category_count,
         'user_count': user_count,
-        'overall_avg_rating': round(overall_avg_rating, 1),
         
         'category_chart_labels': cat_labels,
         'category_chart_data': cat_data,
@@ -57,10 +55,9 @@ def dashboard_view(request):
         'recent_notes': recent_notes,
         'top_notes': top_notes,
         
-        'pending_teachers_count': pending_teachers,
-        'unrated_notes_count': unrated_notes,
+        'top_users': top_users, # <-- The missing piece!
     } 
-    # We will create this template in the next batch
+    # This template was updated in the "Villain Arc"
     return render(request, 'core/dashboard.html', context)
 
 # View for registration (with APPROVAL LOGIC)
@@ -94,5 +91,5 @@ def register_view(request):
     else:
         form = CustomUserCreationForm()
     
-    # We will create this template in the next batch
+    # This template was updated in the "Villain Arc"
     return render(request, 'registration/register.html', {'form': form})

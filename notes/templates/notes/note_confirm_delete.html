@@ -4,22 +4,31 @@
 {% block page_title %}Confirm Deletion{% endblock %}
 
 {% block content %}
-<div class="bg-card p-6 md:p-8 rounded-2xl shadow-lg border border-border max-w-2xl mx-auto animate-fade-in-up">
+<div class="bento-card p-6 md:p-8 rounded-lg max-w-2xl mx-auto animate-fade-in-up">
   
   <form method="post">
     {% csrf_token %}
     
-    <h3 class="text-xl font-semibold text-foreground">Are you sure?</h3>
-    <p class="text-muted-foreground mt-2">
-      You are about to permanently delete the note: 
-      <strong class="text-foreground">{{ object.title }}</strong>.
-    </p>
-    <p class="text-destructive font-medium mt-2">This action cannot be undone.</p>
+    <div class="flex items-center gap-4">
+      <div class="w-12 h-12 rounded-lg flex-shrink-0 flex items-center justify-center bg-destructive/10 border border-destructive/50">
+          <i data-lucide="alert-triangle" class="w-6 h-6 text-destructive"></i>
+      </div>
+      <div>
+        <h3 class="text-xl font-semibold text-foreground">Are you sure?</h3>
+        <p class="text-muted-foreground mt-1">
+          You are about to permanently delete the note: 
+          <strong class="text-foreground">{{ object.title }}</strong>.
+        </p>
+      </div>
+    </div>
+    
+    <p class="text-destructive font-medium mt-4">This action cannot be undone.</p>
 
-    <div class="mt-8 pt-6 border-t border-border flex items-center gap-4">
+    <div class="mt-8 pt-6 border-t border-border/50 flex items-center gap-4">
       <button 
         type="submit" 
-        class="btn-primary flex items-center gap-2 px-6 py-2 rounded-lg text-sm font-medium bg-destructive hover:bg-destructive/80"
+        class="btn-primary flex items-center gap-2 px-6 py-2 rounded-lg text-sm font-medium 
+               bg-destructive hover:bg-destructive/80"
       >
         <i data-lucide="trash-2" class="w-4 h-4"></i>
         Yes, Delete Note

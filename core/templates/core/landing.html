@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="en" class=""> <head>
+<html lang="en" class="dark"> <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Welcome to EduShare</title>
+    <title>Welcome to EduShare - The Future of Notes</title>
 
     <script src="https://cdn.tailwindcss.com"></script>
     
@@ -61,8 +61,6 @@
             },
             fontFamily: {
               sans: ["var(--font-sans)", "system-ui", "sans-serif"],
-              serif: ["var(--font-serif)"],
-              mono: ["var(--font-mono)"],
             },
             keyframes: {
               "gradient-animation": {
@@ -74,16 +72,22 @@
                 "from": { opacity: 0, transform: "translateY(20px)" },
                 "to": { opacity: 1, transform: "translateY(0)" },
               },
-              "background-pan": {
-                "0%": { backgroundPosition: "0% 50%" },
-                "50%": { backgroundPosition: "100% 50%" },
-                "100%": { backgroundPosition: "0% 50%" },
+              /* --- NEW: Aurora Keyframes --- */
+              "aurora": {
+                "from": { backgroundPosition: "50% 50%, 50% 50%" },
+                "to": { backgroundPosition: "350% 50%, 350% 50%" },
               },
+              "hero-glow": {
+                 "0%, 100%": { opacity: 0.2, transform: "scale(0.8)" },
+                 "50%": { opacity: 0.4, transform: "scale(1)" }
+              }
             },
             animation: {
               "gradient-pulse": "gradient-animation 6s ease-in-out infinite",
               "fade-in-up": "fadeIn 0.6s ease-out forwards",
-              "background-pan": "background-pan 10s ease-in-out infinite",
+              /* --- NEW: Aurora Animation --- */
+              "aurora": "aurora 60s linear infinite",
+              "hero-glow": "hero-glow 8s ease-in-out infinite",
             },
           },
         },
@@ -91,95 +95,97 @@
     </script>
 
     <script src="https://unpkg.com/lucide@latest"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
     <style type="text/css">
       :root {
-        --background: hsl(0, 0%, 100%);
-        --foreground: hsl(222, 30%, 15%);
+        /* --- NEON MINT THEME --- */
+        --background: hsl(220, 15%, 97%);
+        --foreground: hsl(222, 20%, 25%);
         --card: hsl(0, 0%, 100%);
-        --card-foreground: hsl(222, 30%, 15%);
+        --card-foreground: hsl(222, 20%, 25%);
         --popover: hsl(0, 0%, 100%);
-        --popover-foreground: hsl(222, 30%, 15%);
+        --popover-foreground: hsl(222, 20%, 25%);
         
-        --primary-light: hsl(210, 100%, 80%);
-        --primary: hsl(210, 100%, 50%);
-        --primary-dark: hsl(260, 100%, 55%); 
+        --primary-light: hsl(145, 90%, 80%);
+        --primary: hsl(145, 70%, 45%); /* Main Minty Green */
+        --primary-dark: hsl(160, 80%, 35%); /* Dark Teal for gradient */
         --primary-foreground: hsl(0, 0%, 100%);
 
-        --secondary-light: hsl(186, 100%, 80%);
-        --secondary: hsl(186, 100%, 38%);
-        --secondary-dark: hsl(186, 100%, 28%);
-        --secondary-foreground: hsl(0, 0%, 100%);
-        
         --muted: hsl(220, 20%, 94%);
-        --muted-foreground: hsl(215, 16%, 47%);
-        --accent: hsl(36, 100%, 50%);
-        --accent-foreground: hsl(222, 30%, 15%);
-        --destructive: hsl(0, 84%, 60%);
-        --destructive-foreground: hsl(0, 0%, 100%);
+        --muted-foreground: hsl(220, 15%, 45%);
+        --accent: hsl(135, 90%, 50%); /* Sharp Neon Green */
         --border: hsl(220, 20%, 90%);
         --input: hsl(220, 20%, 90%);
-        --ring: hsl(210, 100%, 50%);
-        
-        --font-sans: "Inter", "system-ui", sans-serif;
-        --font-serif: Georgia, serif;
-        --font-mono: Menlo, monospace;
-        --radius: 12px;
-        --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-        --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
-        --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-        --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+        --ring: hsl(145, 70%, 45%);
+        --radius: 10px;
+        --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.07), 0 4px 6px -4px rgb(0 0 0 / 0.07);
         --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
       }
       .dark {
-        --background: hsl(222, 30%, 10%);
+        /* --- DARK MODE VARIANTS --- */
+        --background: hsl(222, 30%, 12%);
         --foreground: hsl(210, 20%, 90%);
-        --card: hsl(222, 30%, 13%);
+        --card: hsl(222, 30%, 15%);
         --card-foreground: hsl(210, 20%, 90%);
-        --popover: hsl(222, 30%, 10%);
+        --popover: hsl(222, 30%, 12%);
         --popover-foreground: hsl(210, 20%, 90%);
         
-        --primary-light: hsl(210, 100%, 70%);
-        --primary: hsl(210, 100%, 60%);
-        --primary-dark: hsl(260, 100%, 65%);
-        --primary-foreground: hsl(0, 0%, 100%);
+        --primary-light: hsl(145, 70%, 55%);
+        --primary: hsl(145, 70%, 50%); /* Bright Mint Green */
+        --primary-dark: hsl(150, 70%, 60%);
+        --primary-foreground: hsl(145, 100%, 10%);
         
-        --secondary-light: hsl(186, 100%, 70%);
-        --secondary: hsl(186, 100%, 48%);
-        --secondary-dark: hsl(186, 100%, 38%);
-        --secondary-foreground: hsl(0, 0%, 100%);
-
-        --muted: hsl(222, 30%, 18%);
+        --muted: hsl(222, 30%, 20%);
         --muted-foreground: hsl(215, 16%, 55%);
-        --accent: hsl(36, 100%, 60%);
-        --accent-foreground: hsl(210, 20%, 90%);
-        --destructive: hsl(0, 84%, 70%);
-        --destructive-foreground: hsl(0, 0%, 100%);
+        --accent: hsl(135, 90%, 55%);
         --border: hsl(222, 30%, 25%);
         --input: hsl(222, 30%, 25%);
-        --ring: hsl(210, 100%, 60%);
+        --ring: hsl(145, 70%, 50%);
       }
       body {
         font-family: var(--font-sans), system-ui, sans-serif;
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
+        background-color: var(--background);
+        color: var(--foreground);
+        transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
       }
       
+      /* --- NEW: Aurora Background --- */
+      .aurora-bg {
+        position: fixed;
+        top: 0; left: 0; right: 0; bottom: 0;
+        width: 100vw; height: 100vh;
+        z-index: -10;
+        background:
+            radial-gradient(at 20% 20%, var(--primary-dark) 0px, transparent 50%),
+            radial-gradient(at 80% 20%, var(--primary) 0px, transparent 50%),
+            radial-gradient(at 20% 80%, var(--accent) 0px, transparent 50%),
+            radial-gradient(at 80% 80%, var(--primary-dark) 0px, transparent 50%);
+        background-size: 200% 200%;
+        filter: blur(100px);
+        opacity: 0.15;
+        animation: aurora 60s linear infinite;
+      }
+      .dark .aurora-bg {
+        opacity: 0.2;
+      }
+      
+      /* --- NEW: Button Glow Effect --- */
       .btn-primary {
         color: var(--primary-foreground);
-        background: linear-gradient(
-          60deg, 
-          var(--primary), 
-          var(--primary-dark), 
-          var(--primary)
-        );
+        font-weight: 600;
+        background: linear-gradient( 60deg, var(--primary), var(--primary-dark), var(--primary));
         background-size: 300% 300%;
         animation: gradient-animation 8s ease-in-out infinite;
         transition: all 0.3s ease-in-out;
       }
+      .dark .btn-primary { color: var(--primary-foreground); }
       .btn-primary:hover {
         transform: translateY(-4px) scale(1.05);
-        box-shadow: var(--shadow-xl);
+        box-shadow: 0 0 25px 0px hsla(var(--primary-light), 0.5); /* NEON GLOW */
+        filter: brightness(1.1);
       }
       
       .btn-secondary {
@@ -188,9 +194,7 @@
         border: 1px solid var(--border);
         transition: all 0.3s ease-in-out;
       }
-      .dark .btn-secondary {
-        color: var(--foreground);
-      }
+      .dark .btn-secondary { color: var(--foreground); }
       .btn-secondary:hover {
          transform: translateY(-4px) scale(1.05);
          box-shadow: var(--shadow-lg);
@@ -198,54 +202,78 @@
          color: var(--primary);
       }
 
-      /* Ensure icons in the theme toggle swap correctly */
-      .dark #theme-toggle .dark-icon {
-        display: block;
-      }
-      .dark #theme-toggle .light-icon {
-        display: none;
-      }
-      #theme-toggle .dark-icon {
-        display: none;
-      }
-      #theme-toggle .light-icon {
-        display: block;
-      }
+      /* --- NEW: Theme Toggle Icons --- */
+      .dark #theme-toggle .dark-icon { display: block; }
+      .dark #theme-toggle .light-icon { display: none; }
+      #theme-toggle .dark-icon { display: none; }
+      #theme-toggle .light-icon { display: block; }
       
+      /* --- NEW: Hero Gradient Text --- */
       .hero-gradient-text {
-        background: linear-gradient(
-          60deg, 
-          var(--primary), 
-          var(--primary-dark)
-        );
-        /* --- FIX IS HERE --- */
+        background: linear-gradient( 60deg, var(--primary-light), var(--primary));
         -webkit-background-clip: text;
         background-clip: text;
         -webkit-text-fill-color: transparent;
       }
-      
-      .feature-card {
-         transition: all 0.3s ease-in-out;
+      .dark .hero-gradient-text {
+         background: linear-gradient( 60deg, var(--primary), var(--primary-dark));
+         -webkit-background-clip: text;
+         background-clip: text;
+         -webkit-text-fill-color: transparent;
       }
-      .feature-card:hover {
-        transform: translateY(-8px) scale(1.03);
+      
+      /* --- NEW: Hero Mockup Cards --- */
+      .mockup-card {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        padding: 1rem;
         box-shadow: var(--shadow-xl);
+        transition: all 0.3s ease-in-out;
+      }
+      
+      /* --- NEW: Bento Grid Cards --- */
+      .bento-card {
+        background-color: var(--card);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        padding: 1.5rem;
+        box-shadow: var(--shadow-lg);
+        transition: all 0.3s ease-in-out;
+        position: relative;
+        overflow: hidden;
+      }
+      .bento-card::before {
+        content: "";
+        position: absolute;
+        top: 0; left: 0;
+        width: 100%; height: 100%;
+        background: radial-gradient(
+          800px circle at var(--mouse-x, 0) var(--mouse-y, 0),
+          hsla(145, 70%, 50%, 0.15), /* Use primary color */
+          transparent 40%
+        );
+        opacity: 0;
+        transition: opacity 0.5s;
+      }
+      .bento-card:hover::before {
+        opacity: 1;
+      }
+      .bento-card:hover {
+        transform: translateY(-6px);
         border-color: var(--primary);
       }
-      .feature-card:hover i {
-        transform: scale(1.1) rotate(5deg);
+      .bento-card i {
         color: var(--primary);
       }
-       .feature-card i {
-         transition: all 0.3s ease-in-out;
-         color: var(--primary-dark);
-       }
 
     </style>
 </head>
-<body class="bg-background text-foreground min-h-screen flex flex-col transition-colors duration-300">
+<body class="relative overflow-x-hidden" x-data="{}">
 
-    <header class="w-full bg-card/90 backdrop-blur-md shadow-sm sticky top-0 z-50 border-b border-border">
+    <div class="aurora-bg"></div>
+
+    <header class="w-full bg-background/50 backdrop-blur-md sticky top-0 z-50 border-b border-border/50">
         <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-16">
                 <div class="flex-shrink-0 flex items-center gap-2">
@@ -259,17 +287,16 @@
                 
                 <div class="hidden md:flex md:space-x-8">
                     <a href="#features" class="font-medium text-muted-foreground hover:text-primary transition-colors">Features</a>
-                    <a href="#" class="font-medium text-muted-foreground hover:text-primary transition-colors">Pricing</a>
-                    <a href="#" class="font-medium text-muted-foreground hover:text-primary transition-colors">About</a>
+                    <a href="#about" class="font-medium text-muted-foreground hover:text-primary transition-colors">About</a>
                 </div>
                 
                 <div class="flex items-center space-x-2">
                     <a href="{% url 'register' %}" 
-                       class="btn-secondary hidden sm:inline-flex items-center justify-center px-4 py-2 text-sm font-medium rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2">
+                       class="btn-secondary hidden sm:inline-flex items-center justify-center px-3 py-2 text-sm font-medium rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2">
                         Sign Up
                     </a>
                     <a href="{% url 'login' %}" 
-                       class="btn-primary inline-flex items-center justify-center px-4 py-2 text-sm font-medium rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2">
+                       class="btn-primary inline-flex items-center justify-center px-3 py-2 text-sm font-medium rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2">
                         Login
                     </a>
                     
@@ -283,68 +310,129 @@
         </nav>
     </header>
 
-    <main class="flex-grow">
+    <main class="flex-grow z-10">
         
-        <section class="flex items-center justify-center py-24 sm:py-32 px-4 sm:px-6 lg:px-8 overflow-hidden">
-            <div class="max-w-3xl mx-auto text-center animate-fade-in-up">
-                <h1 class="text-4xl sm:text-5xl md:text-7xl font-extrabold tracking-tight text-foreground">
-                    The Future of
-                    <span class="block hero-gradient-text xl:inline mt-2">Notes Sharing</span>
-                </h1>
-                <p class="mt-6 text-lg sm:text-xl text-muted-foreground max-w-xl mx-auto">
-                    A unified platform to upload, discover, and rate notes.
-                    Streamline your studies today.
-                </p>
-                <div class="mt-10 flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4">
-                    <a href="{% url 'register' %}" 
-                       class="btn-primary inline-flex items-center justify-center px-8 py-3 text-base font-medium rounded-lg shadow-lg focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2">
-                        Get Started
-                    </a>
-                    <a href="#features" 
-                       class="btn-secondary inline-flex items-center justify-center px-8 py-3 text-base font-medium rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2">
-                        Learn More
-                    </a>
+        <section class="relative min-h-[calc(100vh-4rem)] flex items-center py-20 sm:py-32 px-4 sm:px-6 lg:px-8 overflow-hidden">
+            <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+                
+                <div class="animate-fade-in-up" style="animation-delay: 100ms;">
+                    <h1 class="text-5xl sm:text-6xl md:text-7xl font-extrabold tracking-tighter text-foreground">
+                        Share Notes.
+                        <span class="block hero-gradient-text xl:inline mt-2">Get Better Grades.</span>
+                    </h1>
+                    <p class="mt-6 text-lg sm:text-xl text-muted-foreground max-w-xl">
+                        EduShare is the open-source platform built for students. 
+                        Upload, discover, and rate class notes to help everyone learn faster.
+                    </p>
+                    <div class="mt-10 flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
+                        <a href="{% url 'register' %}" 
+                           class="btn-primary inline-flex items-center justify-center px-7 py-3 text-base font-medium rounded-lg shadow-lg focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2">
+                            Get Started - It's Free
+                        </a>
+                        <a href="#features" 
+                           class="btn-secondary inline-flex items-center justify-center px-7 py-3 text-base font-medium rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2">
+                            Learn More
+                        </a>
+                    </div>
                 </div>
+
+                <div class="relative hidden lg:block animate-fade-in-up" style="animation-delay: 300ms;">
+                    <div class="relative w-full h-96">
+                        
+                        <div class="absolute inset-0 -top-10 -left-10 w-full h-full rounded-full bg-primary/30 dark:bg-primary/50 filter blur-3xl opacity-30 animate-hero-glow"></div>
+
+                        <div class="mockup-card absolute top-0 left-10 w-72 transform rotate-6 hover:rotate-2 hover:scale-105">
+                            <h4 class="font-semibold text-foreground">Data Structures</h4>
+                            <p class="text-sm text-muted-foreground">Uploaded by @harshu</p>
+                            <div class="flex items-center justify-between mt-3">
+                                <span class="text-xs font-medium text-primary bg-primary/10 px-2 py-1 rounded-full">PDF</span>
+                                <div class="flex text-yellow-500">
+                                    <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                                    <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                                    <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                                    <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                                    <i data-lucide="star-half" class="w-4 h-4 fill-current"></i>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mockup-card absolute top-32 -left-10 w-64 transform -rotate-12 hover:rotate-6 hover:scale-105">
+                            <h4 class="font-semibold text-foreground">Python QuickRef</h4>
+                            <p class="text-sm text-muted-foreground">Uploaded by @admin</p>
+                             <div class="flex items-center justify-between mt-3">
+                                <span class="text-xs font-medium text-blue-500 bg-blue-500/10 px-2 py-1 rounded-full">DOCX</span>
+                                <div class="flex text-yellow-500">
+                                    <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                                    <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                                    <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                                    <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                                    <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mockup-card absolute top-40 right-0 w-64 transform rotate-12 hover:rotate-3 hover:scale-105">
+                             <h4 class="font-semibold text-foreground">OS Concepts</h4>
+                             <p class="text-sm text-muted-foreground">Uploaded by @teacher</p>
+                             <div class="flex items-center justify-between mt-3">
+                                <span class="text-xs font-medium text-orange-500 bg-orange-500/10 px-2 py-1 rounded-full">PPT</span>
+                                <div class="flex text-yellow-500">
+                                    <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                                    <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                                    <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                                    <i data-lucide="star" class="w-4 h-4"></i>
+                                    <i data-lucide="star" class="w-4 h-4"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </section>
 
-        <section id="features" class="py-20 bg-muted/50">
+        <section id="features" class="py-20 lg:py-32">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="text-center">
-                    <h2 class="text-base font-semibold text-primary-dark tracking-wide uppercase">All-in-One</h2>
-                    <p class="mt-2 text-3xl font-extrabold text-foreground sm:text-4xl">
-                        A Better Experience for Everyone
+                    <h2 class="text-base font-semibold text-primary tracking-wide uppercase">Why EduShare?</h2>
+                    <p class="mt-2 text-3xl font-extrabold text-foreground sm:text-5xl tracking-tighter">
+                        A Smarter Way to Study
                     </p>
                 </div>
 
-                <div class="mt-16 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-                    <div class="feature-card bg-card p-6 rounded-2xl shadow-lg border border-border">
-                        <div class="flex-shrink-0">
-                            <i data-lucide="upload-cloud" class="h-10 w-10"></i>
-                        </div>
-                        <h3 class="mt-4 text-xl font-bold text-foreground">Upload Notes</h3>
+                <div class="mt-16 grid grid-cols-1 lg:grid-cols-3 gap-6" id="bento-grid">
+                    
+                    <div class="bento-card lg:col-span-2">
+                        <i data-lucide="upload-cloud" class="w-10 h-10 mb-4"></i>
+                        <h3 class="mt-4 text-2xl font-bold text-foreground">Drag. Drop. Done.</h3>
                         <p class="mt-2 text-base text-muted-foreground">
-                            Easily upload your PDF, DOCX, and PPT files with a simple drag-and-drop interface.
+                            Easily upload your PDF, DOCX, and PPT files with a simple drag-and-drop interface. 
+                            Your notes are processed and available in seconds.
                         </p>
                     </div>
 
-                    <div class="feature-card bg-card p-6 rounded-2xl shadow-lg border border-border">
-                        <div class="flex-shrink-0">
-                            <i data-lucide="search" class="h-10 w-10"></i>
-                        </div>
-                        <h3 class="mt-4 text-xl font-bold text-foreground">Discover & Search</h3>
+                    <div class="bento-card lg:col-span-1">
+                        <i data-lucide="star" class="w-10 h-10 mb-4"></i>
+                        <h3 class="mt-4 text-2xl font-bold text-foreground">Find the Best</h3>
                         <p class="mt-2 text-base text-muted-foreground">
-                            Find the exact notes you need by searching by subject, category, uploader, or rating.
-                        </d>
+                           Rate the notes you read. Sort by top-rated to find the best community-vetted materials.
+                        </p>
+                    </div>
+                    
+                    <div class="bento-card lg:col-span-1">
+                        <i data-lucide="search" class="w-10 h-10 mb-4"></i>
+                        <h3 class="mt-4 text-2xl font-bold text-foreground">Powerful Search</h3>
+                        <p class="mt-2 text-base text-muted-foreground">
+                           Find exactly what you need by searching subject, category, or uploader.
+                        </p>
                     </div>
 
-                    <div class="feature-card bg-card p-6 rounded-2xl shadow-lg border border-border">
-                        <div class="flex-shrink-0">
-                            <i data-lucide="star" class="h-10 w-10"></i>
-                        </div>
-                        <h3 class="mt-4 text-xl font-bold text-foreground">Rate & Review</h3>
+                    <div class="bento-card lg:col-span-2">
+                         <i data-lucide="users" class="w-10 h-10 mb-4"></i>
+                        <h3 class="mt-4 text-2xl font-bold text-foreground">By Students, For Students</h3>
                         <p class="mt-2 text-base text-muted-foreground">
-                           Help the community by rating notes. Sort by top-rated to find the best materials.
+                            This isn't a corporate product. It's an open-source tool built to
+                            actually help you and your classmates succeed.
                         </p>
                     </div>
                 </div>
@@ -353,10 +441,10 @@
 
     </main>
 
-    <footer class="bg-background border-t border-border">
+    <footer id="about" class="bg-card border-t border-border mt-20">
         <div class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8 text-center">
             <p class="text-base text-muted-foreground">
-                &copy; 2025 EduShare. All rights reserved.
+                &copy; 2025 EduShare. Built with 💚.
             </p>
         </div>
     </footer>
@@ -380,14 +468,40 @@
                 }
                 lucide.createIcons(); // Re-run to swap icons
             }
-
-            const savedTheme = localStorage.theme || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
-            applyTheme(savedTheme);
+            
+            // Check for saved theme
+            const savedTheme = localStorage.theme;
+            if (savedTheme) {
+                 applyTheme(savedTheme);
+            }
+            // No saved theme, but system is dark (and we default to dark)
+            else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                 applyTheme('dark');
+            } 
+            // No saved theme, system is light (so remove default dark)
+            else {
+                 applyTheme('light');
+            }
 
             themeToggleBtn.addEventListener('click', () => {
                 const newTheme = htmlElement.classList.contains('dark') ? 'light' : 'dark';
                 applyTheme(newTheme);
             });
+            
+            // 3. Bento Card Mouse-Follow Effect
+            const grid = document.getElementById('bento-grid');
+            if (grid) {
+                grid.addEventListener('mousemove', (e) => {
+                    const card = e.target.closest('.bento-card');
+                    if (card) {
+                        const rect = card.getBoundingClientRect();
+                        const x = e.clientX - rect.left;
+                        const y = e.clientY - rect.top;
+                        card.style.setProperty('--mouse-x', `${x}px`);
+                        card.style.setProperty('--mouse-y', `${y}px`);
+                    }
+                });
+            }
         });
     </script>
 </body>

@@ -7,34 +7,17 @@
 {% block content %}
 <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-6 animate-fade-in-up">
 
-  <div class="lg:col-span-2 bg-card p-6 md:p-8 rounded-2xl shadow-lg border border-border">
+  <div class="lg:col-span-2 bento-card p-6 md:p-8">
     
-    <div class="border-b border-border pb-4 mb-6">
-      <div class="flex justify-between items-start">
-        <div>
-          <p class="text-sm font-medium text-primary">
-            <a href="{% url 'categories:category-detail' note.category.pk %}" class="hover:underline">
-              {{ note.category.name|default:"Uncategorized" }}
-            </a>
-          </p>
-          <h1 class="text-3xl font-bold text-foreground mt-1">{{ note.title }}</h1>
-        </div>
-        
-        {% if user == note.uploader or user.is_teacher or user.is_staff %}
-        <div class="flex-shrink-0 flex gap-2" x-data="{}">
-          <a href="{% url 'notes:note-edit' note.pk %}" 
-             class="btn-secondary flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium">
-            <i data-lucide="edit" class="w-4 h-4"></i> Edit
-          </a>
-          <a href="{% url 'notes:note-delete' note.pk %}"
-             class="btn-secondary flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium text-destructive hover:bg-destructive hover:text-destructive-foreground hover:border-destructive">
-            <i data-lucide="trash-2" class="w-4 h-4"></i> Delete
-          </a>
-        </div>
-        {% endif %}
-      </div>
+    <div class="border-b border-border/50 pb-4 mb-6">
+      <p class="text-sm font-medium text-primary">
+        <a href="{% url 'categories:category-detail' note.category.pk %}" class="hover:underline">
+          {{ note.category.name|default:"Uncategorized" }}
+        </a>
+      </p>
+      <h1 class="text-3xl font-bold text-foreground mt-1">{{ note.title }}</h1>
       
-      <div class="flex items-center gap-4 text-sm text-muted-foreground mt-4">
+      <div class="flex flex-wrap items-center gap-4 text-sm text-muted-foreground mt-4">
         <div class="flex items-center gap-2">
           <i data-lucide="user" class="w-4 h-4"></i>
           <span>{{ note.uploader.first_name|default:note.uploader.username }} {{ note.uploader.last_name }}</span>
@@ -50,22 +33,22 @@
       </div>
     </div>
     
-    <div class="prose dark:prose-invert max-w-none text-foreground">
-      <h3 classs="text-lg font-semibold">Description</h3>
+    <div class="prose prose-invert max-w-none text-foreground">
+      <h3 class="text-lg font-semibold">Description</h3>
       <p>{{ note.description|default:"No description provided."|linebreaksbr }}</p>
     </div>
     
     <div class="mt-8">
-      <h3 classs="text-lg font-semibold mb-4">File Preview & Download</h3>
-      <div class="bg-muted/50 border border-border rounded-lg p-4">
+      <h3 class="text-lg font-semibold mb-4">File Preview & Download</h3>
+      <div class="bg-muted/30 border border-border/50 rounded-lg p-4">
         {% if 'pdf' in note.file.name|lower %}
-          <iframe src="{{ note.file.url }}" width="100%" height="600px" class="rounded-lg border border-border">
+          <iframe src="{{ note.file.url }}" width="100%" height="600px" class="rounded-lg border border-border/50">
              <p>Your browser does not support PDFs. <a href="{{ note.file.url }}">Download the PDF</a>.</p>
           </iframe>
         {% else %}
-          <div class="text-center p-12">
+          <div classs="text-center p-12">
             <i data-lucide="file-question" class="w-16 h-16 text-muted-foreground mx-auto"></i>
-            <p class="text-muted-foreground mt-2">Preview is not available for this file type.</p>
+            <p class="text-muted-foreground mt-2">Preview is not available for this file type (yet!).</p>
           </div>
         {% endif %}
         
@@ -80,171 +63,56 @@
   </div>
 
   <div class="lg:col-span-1 space-y-6">
-    <div class="bg-card p-6 rounded-2xl shadow-lg border border-border">
-      <h3 class="text-lg font-semibold text-foreground mb-1">Overall Rating</h3>
-      <div class="flex items-center gap-2">
-        <span class="text-4xl font-bold text-yellow-500" id="avg-rating">{{ note.average_rating|floatformat:1 }}</span>
-        <div class="flex flex-col">
-          <div class="flex text-yellow-500">
-            <div id="avg-stars" data-rating="{{ note.average_rating|floatformat:1 }}"></div>
+    <div class="sticky top-24 space-y-6">
+      
+      <div class="bento-card p-6">
+        <h3 class="text-lg font-semibold text-foreground mb-1">Overall Rating</h3>
+        <div class="flex items-center gap-2">
+          <span class="text-4xl font-bold text-yellow-400" id="avg-rating">{{ note.average_rating|floatformat:1 }}</span>
+          <div class="flex flex-col">
+            <div class="flex text-yellow-400" id="avg-stars" data-rating="{{ note.average_rating|floatformat:1 }}">
+              </div>
+            <span class="text-sm text-muted-foreground" id="total-ratings">
+              based on {{ note.total_ratings }} rating{{ note.total_ratings|pluralize }}
+            </span>
           </div>
-          <span class="text-sm text-muted-foreground" id="total-ratings">
-            based on {{ note.total_ratings }} rating{{ note.total_ratings|pluralize }}
-          </span>
         </div>
       </div>
-    </div>
-    
-    {% if user.is_authenticated %}
-    <div classs="bg-card p-6 rounded-2xl shadow-lg border border-border">
-      <h3 class="text-lg font-semibold text-foreground mb-3">
-        {% if user_rating_value > 0 %}Your Rating ({{ user_rating_value }} Stars){% else %}Rate this Note{% endif %}
-      </h3>
       
-      <form id="rating-form" method="POST" action="{% url 'notes:note-rate' note.pk %}">
-        {% csrf_token %}
-        <input type="hidden" name="rating" id="rating-value" value="{{ user_rating_value }}">
+      {% if user.is_authenticated %}
+      <div classs="bento-card p-6">
+        <h3 class="text-lg font-semibold text-foreground mb-3">
+          {% if user_rating_value > 0 %}Your Rating ({{ user_rating_value }} Stars){% else %}Rate this Note{% endif %}
+        </h3>
         
-        <div class="flex items-center justify-center space-x-1" id="star-rating-widget">
-          {% for i in "12345" %}
-          <button type="button" 
-                  class="star-btn p-2 text-gray-300 hover:text-yellow-500 transition-all duration-150" 
-                  data-value="{{ i }}">
-            <i data-lucide="star" class="w-8 h-8 fill-current"></i>
+        <form id="rating-form" method="POST" action="{% url 'notes:note-rate' note.pk %}">
+          {% csrf_token %}
+          <input type="hidden" name="rating" id="rating-value" value="{{ user_rating_value }}">
+          
+          <div class="flex items-center justify-center space-x-2" id="star-rating-widget">
+            {% for i in "12345" %}
+            <button type="button" 
+                    class="star-btn h-12 flex-1 rounded-lg bg-muted/30 border border-border/50 text-muted-foreground
+                           hover:border-primary hover:text-primary transition-all duration-150" 
+                    data-value="{{ i }}">
+              <span class="text-xl font-bold">{{ i }}</span>
+            </button>
+            {% endfor %}
+          </div>
+          <button type="submit" class="btn-primary w-full px-4 py-2 rounded-lg text-sm font-medium mt-4">
+            Submit Rating
           </button>
-          {% endfor %}
-        </div>
-        <button type="submit" class="btn-primary w-full px-4 py-2 rounded-lg text-sm font-medium mt-4">
-          Submit Rating
-        </button>
-      </form>
-      <p id="rating-feedback" class="text-xs text-center text-muted-foreground mt-2"></p>
-    </div>
-    {% else %}
-    <div classs="bg-card p-6 rounded-2xl shadow-lg border border-border text-center">
-      <p class="text-muted-foreground">
-        <a href="{% url 'login' %}?next={{ request.path }}" class="text-primary font-medium hover:underline">Log in</a> to rate this note.
-      </p>
-    </div>
-    {% endif %}
-    
-  </div>
-
-</div>
-{% endblock %}
-
-{% block extra_js %}
-<script>
-  document.addEventListener('DOMContentLoaded', () => {
-    
-    // --- Star Rating Widget ---
-    const widget = document.getElementById('star-rating-widget');
-    if (widget) {
-      const buttons = widget.querySelectorAll('.star-btn');
-      const ratingInput = document.getElementById('rating-value');
+        </form>
+        <p id="rating-feedback" class="text-xs text-center text-muted-foreground mt-2"></p>
+      </div>
+      {% else %}
+      <div classs="bento-card p-6 text-center">
+        <p class="text-muted-foreground">
+          <a href="{% url 'login' %}?next={{ request.path }}" class="text-primary font-medium hover:underline">Log in</a> to rate this note.
+        </p>
+      </div>
+      {% endif %}
       
-      let currentRating = parseInt(ratingInput.value) || 0;
-      
-      const updateStars = (rating) => {
-        buttons.forEach(btn => {
-          if (parseInt(btn.dataset.value) <= rating) {
-            btn.classList.add('text-yellow-500');
-            btn.classList.remove('text-gray-300');
-          } else {
-            btn.classList.remove('text-yellow-500');
-            btn.classList.add('text-gray-300');
-          }
-        });
-      };
-      
-      buttons.forEach(btn => {
-        btn.addEventListener('mouseenter', () => updateStars(parseInt(btn.dataset.value)));
-        btn.addEventListener('mouseleave', () => updateStars(currentRating));
-        btn.addEventListener('click', (e) => {
-          e.preventDefault();
-          currentRating = parseInt(btn.dataset.value);
-          ratingInput.value = currentRating;
-          updateStars(currentRating);
-        });
-      });
-      
-      // Set initial state
-      updateStars(currentRating);
-    }
-    
-    // --- Rating Form Submission (AJAX) ---
-    const ratingForm = document.getElementById('rating-form');
-    if (ratingForm) {
-      ratingForm.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        
-        const feedbackEl = document.getElementById('rating-feedback');
-        const avgRatingEl = document.getElementById('avg-rating');
-        const totalRatingsEl = document.getElementById('total-ratings');
-        
-        feedbackEl.textContent = 'Submitting...';
-        
-        try {
-          const formData = new FormData(ratingForm);
-          const response = await fetch(ratingForm.action, {
-            method: 'POST',
-            body: formData,
-            headers: {
-              'X-Requested-With': 'XMLHttpRequest',
-            }
-          });
-          
-          const data = await response.json();
-          
-          if (response.ok) {
-            feedbackEl.textContent = data.message;
-            feedbackEl.classList.add('text-green-600');
-            feedbackEl.classList.remove('text-red-600');
-            
-            // Update the dashboard stats
-            avgRatingEl.textContent = data.average_rating;
-            totalRatingsEl.textContent = `based on ${data.total_ratings} rating${data.total_ratings === 1 ? '' : 's'}`;
-            
-            // Update the average stars display
-            updateAverageStars(data.average_rating);
-            
-          } else {
-            throw new Error(data.error || 'An error occurred.');
-          }
-        } catch (error) {
-          feedbackEl.textContent = error.message;
-          feedbackEl.classList.add('text-red-600');
-          feedbackEl.classList.remove('text-green-600');
-        }
-      });
-    }
-
-    // --- Average Star Display ---
-    const avgStarsEl = document.getElementById('avg-stars');
-    if (avgStarsEl) {
-      const updateAverageStars = (rating) => {
-        let starsHtml = '';
-        const fullStars = Math.floor(rating);
-        const halfStar = (rating % 1 >= 0.5) ? 1 : 0;
-        const emptyStars = 5 - fullStars - halfStar;
-
-        for(let i=0; i < fullStars; i++) {
-          starsHtml += `<i data-lucide="star" class="w-5 h-5 fill-current"></i>`;
-        }
-        if (halfStar) {
-          starsHtml += `<i data-lucide="star-half" class="w-5 h-5 fill-current"></i>`;
-        }
-        for(let i=0; i < emptyStars; i++) {
-          starsHtml += `<i data-lucide="star" class="w-5 h-5"></i>`;
-        }
-        avgStarsEl.innerHTML = starsHtml;
-        lucide.createIcons(); // Re-render icons
-      };
-      
-      // Initial render
-      updateAverageStars(parseFloat(avgStarsEl.dataset.rating));
-    }
-
-  });
-</script>
-{% endblock %}
+      {% if user == note.uploader or user.is_teacher or user.is_staff %}
+      <div class="bento-card p-6">
+        <h3 class="text-lg font-semibold text

@@ -1,14 +1,16 @@
 {% load static %}
 <!DOCTYPE html>
-<html lang="en">
-  <head>
+<html lang="en" class="dark"> <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <title>{% block title %}Dashboard{% endblock %} - EduShare</title>
 
     <script src="https://cdn.tailwindcss.com"></script>
-
+    
+    <script src="https://unpkg.com/@yaireo/tagify"></script>
+    <script src="https://unpkg.com/@yaireo/tagify/dist/tagify.polyfills.min.js"></script>
+    <link href="https://unpkg.com/@yaireo/tagify/dist/tagify.css" rel="stylesheet" type="text/css" />
     <script>
       tailwind.config = {
         darkMode: ["class"],
@@ -84,10 +86,9 @@
                 "50%": { backgroundPosition: "100% 50%" },
                 "100%": { backgroundPosition: "0% 50%" },
               },
-              "background-pan": {
-                "0%": { backgroundPosition: "0% 50%" },
-                "50%": { backgroundPosition: "100% 50%" },
-                "100%": { backgroundPosition: "0% 50%" },
+              "aurora": {
+                "from": { backgroundPosition: "50% 50%, 50% 50%" },
+                "to": { backgroundPosition: "350% 50%, 350% 50%" },
               },
               "slide-in-left": {
                 "from": { opacity: 0, transform: "translateX(-20px)" },
@@ -109,7 +110,7 @@
               "accordion-down": "accordion-down 0.2s ease-out",
               "accordion-up": "accordion-up 0.2s ease-out",
               "gradient-pulse": "gradient-animation 8s ease-in-out infinite",
-              "background-pan": "background-pan 10s ease-in-out infinite",
+              "aurora": "aurora 60s linear infinite", 
               "fade-in-up": "fadeIn 0.5s ease-out forwards",
               "slide-in-left": "slide-in-left 0.5s ease-out forwards",
               "pulse-soft": "pulse-soft 2s infinite",
@@ -126,129 +127,134 @@
 
     <style type="text/css">
       :root {
-        --background: hsl(220, 20%, 97%);
-        --foreground: hsl(222, 30%, 15%);
+        /* --- NEON MINT THEME --- */
+        --background: hsl(220, 15%, 97%); 
+        --foreground: hsl(222, 20%, 25%); 
         --card: hsl(0, 0%, 100%);
-        --card-foreground: hsl(222, 30%, 15%);
+        --card-foreground: hsl(222, 20%, 25%);
         --popover: hsl(0, 0%, 100%);
-        --popover-foreground: hsl(222, 30%, 15%);
+        --popover-foreground: hsl(222, 20%, 25%);
         
-        --primary-light: hsl(210, 100%, 80%);
-        --primary: hsl(210, 100%, 50%);
-        --primary-dark: hsl(260, 100%, 55%);
+        --primary-light: hsl(145, 90%, 80%);
+        --primary: hsl(145, 70%, 45%); /* Main Minty Green */
+        --primary-dark: hsl(160, 80%, 35%); /* Dark Teal for gradient */
         --primary-foreground: hsl(0, 0%, 100%);
 
-        --secondary-light: hsl(186, 100%, 80%);
-        --secondary: hsl(186, 100%, 38%);
-        --secondary-dark: hsl(186, 100%, 28%);
+        --secondary-light: hsl(220, 25%, 80%);
+        --secondary: hsl(220, 30%, 50%); 
+        --secondary-dark: hsl(220, 30%, 40%);
         --secondary-foreground: hsl(0, 0%, 100%);
         
         --muted: hsl(220, 20%, 94%);
-        --muted-foreground: hsl(215, 16%, 47%);
-        --accent: hsl(36, 100%, 50%);
-        --accent-foreground: hsl(222, 30%, 15%);
+        --muted-foreground: hsl(220, 15%, 45%);
+        --accent: hsl(135, 90%, 50%); /* Sharp Neon Green */
         --destructive: hsl(0, 84%, 60%);
         --destructive-foreground: hsl(0, 0%, 100%);
         --border: hsl(220, 20%, 90%);
         --input: hsl(220, 20%, 90%);
-        --ring: hsl(210, 100%, 50%);
+        --ring: hsl(145, 70%, 45%); 
 
-        --chart-1: hsl(210, 100%, 50%);
-        --chart-2: hsl(186, 100%, 38%);
-        --chart-3: hsl(36, 100%, 50%);
-        --chart-4: hsl(142, 76%, 36%);
-        --chart-5: hsl(350, 89%, 60%);
+        --chart-1: hsl(145, 70%, 45%);
+        --chart-2: hsl(160, 80%, 35%);
+        --chart-3: hsl(135, 90%, 50%);
+        --chart-4: hsl(180, 50%, 45%);
+        --chart-5: hsl(190, 60%, 40%);
         
         --font-sans: "Inter", "system-ui", sans-serif;
         --font-serif: Georgia, serif;
         --font-mono: Menlo, monospace;
-        --radius: 12px;
-        --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-        --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
-        --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-        --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+        --radius: 10px; 
+        --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.04);
+        --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.07), 0 1px 2px -1px rgb(0 0 0 / 0.07);
+        --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.07), 0 2px 4px -2px rgb(0 0 0 / 0.07);
+        --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.07), 0 4px 6px -4px rgb(0 0 0 / 0.07);
         --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
-        --shadow-2xl: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+        --shadow-2xl: 0 25px 50px -12px rgb(0 0 0 / 0.2);
       }
       .dark {
-        --background: hsl(222, 30%, 10%);
+        /* --- DARK MODE VARIANTS --- */
+        --background: hsl(222, 30%, 12%); 
         --foreground: hsl(210, 20%, 90%);
-        --card: hsl(222, 30%, 13%);
+        --card: hsl(222, 30%, 15%);
         --card-foreground: hsl(210, 20%, 90%);
-        --popover: hsl(222, 30%, 10%);
+        --popover: hsl(222, 30%, 12%);
         --popover-foreground: hsl(210, 20%, 90%);
         
-        --primary-light: hsl(210, 100%, 70%);
-        --primary: hsl(210, 100%, 60%);
-        --primary-dark: hsl(260, 100%, 65%);
-        --primary-foreground: hsl(0, 0%, 100%);
-
-        --secondary-light: hsl(186, 100%, 70%);
-        --secondary: hsl(186, 100%, 48%);
-        --secondary-dark: hsl(186, 100%, 38%);
-        --secondary-foreground: hsl(0, 0%, 100%);
+        --primary-light: hsl(145, 70%, 55%);
+        --primary: hsl(145, 70%, 50%); /* Bright Mint Green */
+        --primary-dark: hsl(150, 70%, 60%);
+        --primary-foreground: hsl(145, 100%, 10%);
         
-        --muted: hsl(222, 30%, 18%);
+        --secondary-light: hsl(220, 20%, 60%);
+        --secondary: hsl(220, 25%, 50%);
+        --secondary-dark: hsl(220, 25%, 40%);
+        --secondary-foreground: hsl(0, 0%, 100%);
+
+        --muted: hsl(222, 30%, 20%);
         --muted-foreground: hsl(215, 16%, 55%);
-        --accent: hsl(36, 100%, 60%);
-        --accent-foreground: hsl(210, 20%, 90%);
+        --accent: hsl(135, 90%, 55%); /* Bright Neon Green */
         --destructive: hsl(0, 84%, 70%);
         --destructive-foreground: hsl(0, 0%, 100%);
         --border: hsl(222, 30%, 25%);
         --input: hsl(222, 30%, 25%);
-        --ring: hsl(210, 100%, 60%);
+        --ring: hsl(145, 70%, 50%);
       }
       body {
         font-family: var(--font-sans), system-ui, sans-serif;
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
+        background-color: var(--background);
+        transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+      }
+
+      /* --- NEW: Aurora Background --- */
+      .aurora-bg {
+        position: fixed;
+        top: 0; left: 0; right: 0; bottom: 0;
+        width: 100vw; height: 100vh;
+        z-index: -10;
+        background:
+            radial-gradient(at 20% 20%, var(--primary-dark) 0px, transparent 50%),
+            radial-gradient(at 80% 20%, var(--primary) 0px, transparent 50%),
+            radial-gradient(at 20% 80%, var(--accent) 0px, transparent 50%),
+            radial-gradient(at 80% 80%, var(--primary-dark) 0px, transparent 50%);
+        background-size: 200% 200%;
+        filter: blur(100px);
+        opacity: 0.15;
+        animation: aurora 60s linear infinite;
+      }
+      .dark .aurora-bg {
+        opacity: 0.2;
       }
       
       /* --- Custom Scrollbar --- */
-      ::-webkit-scrollbar {
-        width: 8px;
-        height: 8px;
-      }
-      ::-webkit-scrollbar-track {
-        background: var(--muted);
-        border-radius: 10px;
-      }
-      ::-webkit-scrollbar-thumb {
-        background: var(--primary);
-        border-radius: 10px;
-      }
-      ::-webkit-scrollbar-thumb:hover {
-        background: var(--primary-dark);
-      }
+      ::-webkit-scrollbar { width: 8px; height: 8px; }
+      ::-webkit-scrollbar-track { background: var(--muted); border-radius: 10px; }
+      ::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 10px; transition: background-color 0.2s ease; }
+      ::-webkit-scrollbar-thumb:hover { background: var(--primary-dark); }
       
       /* --- Animated Gradient Active Sidebar Link --- */
       .sidebar-active {
         color: var(--primary-foreground);
-        background: linear-gradient(
-          60deg, 
-          var(--primary), 
-          var(--primary-dark), 
-          var(--primary)
-        );
+        font-weight: 600; 
+        background: linear-gradient( 60deg, var(--primary), var(--primary-dark), var(--primary));
         background-size: 300% 300%;
         animation: gradient-animation 8s ease-in-out infinite;
-        box-shadow: var(--shadow-lg);
+        box-shadow: 0 0 20px 0px hsla(var(--primary-light), 0.4); /* NEON GLOW */
         transform: scale(1.03);
       }
+      .dark .sidebar-active { color: var(--primary-foreground); }
       
       /* --- Animated Gradient Button --- */
       .btn-primary {
         color: var(--primary-foreground);
-        background: linear-gradient(
-          60deg, 
-          var(--primary), 
-          var(--primary-dark), 
-          var(--primary)
-        );
+        font-weight: 600;
+        background: linear-gradient( 60deg, var(--primary), var(--primary-dark), var(--primary));
         background-size: 300% 300%;
         animation: gradient-animation 8s ease-in-out infinite;
         transition: all 0.3s ease-in-out;
       }
+      .dark .btn-primary { color: var(--primary-foreground); }
       
       .btn-secondary {
         color: var(--foreground);
@@ -256,27 +262,32 @@
         border: 1px solid var(--border);
         transition: all 0.3s ease-in-out;
       }
-      .dark .btn-secondary {
-        color: var(--foreground);
-      }
+      .dark .btn-secondary { color: var(--foreground); }
       .btn-secondary:hover {
-         transform: translateY(-4px) scale(1.05);
-         box-shadow: var(--shadow-lg);
+         transform: translateY(-2px) scale(1.02); 
+         box-shadow: var(--shadow-md);
          border-color: var(--primary);
          color: var(--primary);
       }
 
-      .btn-primary:hover, .stat-card:hover {
+      .btn-primary:hover {
         transform: translateY(-4px) scale(1.03);
-        box-shadow: var(--shadow-xl);
+        box-shadow: 0 0 25px 0px hsla(var(--primary-light), 0.5); /* NEON GLOW */
+        filter: brightness(1.1);
       }
       
-      /* --- Base transition for interactive elements --- */
+      .stat-card:hover {
+        transform: translateY(-4px) scale(1.03);
+        box-shadow: var(--shadow-xl);
+        border-color: var(--primary); 
+      }
+      
+      /* Base transition */
       .table-row, .stat-card, nav a, button, .form-input, .form-select, .form-date, .tab-button {
          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
       }
+      a, button { transition: all 0.2s ease-in-out; }
 
-      /* --- Table Row Hover Effect --- */
       .table-row:hover {
         background-color: var(--muted);
         transform: scale(1.01);
@@ -285,88 +296,72 @@
         position: relative;
       }
       
-      /* --- Bouncy Sidebar Icon Animation --- */
-      nav a:hover i {
-        transform: scale(1.2) rotate(8deg);
-      }
-      nav a i {
-        transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-      }
+      nav a:hover i { transform: scale(1.2) rotate(8deg); }
+      nav a i { transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); }
       
-      /* --- Styling for messages --- */
+      /* Styling for messages */
       .message-list {
-        list-style: none;
-        padding: 0;
-        margin: 0;
-        position: fixed;
-        top: 80px;
-        right: 24px;
-        z-index: 1000;
-        width: 320px;
+        list-style: none; padding: 0; margin: 0;
+        position: fixed; top: 80px; right: 24px;
+        z-index: 1000; width: 320px;
       }
       .message-item {
-        padding: 1rem 1.25rem;
-        margin-bottom: 1rem;
+        padding: 1rem 1.25rem; margin-bottom: 1rem;
         border-radius: var(--radius);
-        font-weight: 500;
-        font-size: 0.875rem; /* text-sm */
+        font-weight: 500; font-size: 0.875rem; 
         box-shadow: var(--shadow-lg);
-        border: 1px solid var(--border);
-        display: flex;
-        align-items: center;
-        gap: 0.75rem;
+        display: flex; align-items: center; gap: 0.75rem;
         animation: slide-in-left 0.5s ease-out forwards;
+        background-color: hsla(222, 30%, 15%, 0.5);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
       }
       .message-item.success {
-        background-color: hsl(145, 63%, 95%);
-        color: hsl(145, 100%, 20%);
-        border-color: hsl(145, 100%, 80%);
-      }
-      .dark .message-item.success {
-        background-color: hsl(145, 63%, 20%);
-        color: hsl(145, 100%, 80%);
-        border-color: hsl(145, 100%, 30%);
+        border: 1px solid hsl(145, 70%, 50%, 0.5);
+        color: hsl(145, 70%, 80%);
       }
       .message-item.info {
-        background-color: hsl(210, 100%, 95%);
-        color: hsl(210, 90%, 40%);
-        border-color: hsl(210, 100%, 85%);
-      }
-      .dark .message-item.info {
-        background-color: hsl(210, 100%, 20%);
+        border: 1px solid hsl(210, 90%, 60%, 0.5);
         color: hsl(210, 90%, 80%);
-        border-color: hsl(210, 100%, 30%);
       }
       .message-item.error {
-        background-color: hsl(0, 100%, 97%);
-        color: hsl(0, 90%, 40%);
-        border-color: hsl(0, 100%, 90%);
-      }
-      .dark .message-item.error {
-        background-color: hsl(0, 100%, 20%);
+        border: 1px solid hsl(0, 90%, 60%, 0.5);
         color: hsl(0, 90%, 80%);
-        border-color: hsl(0, 100%, 30%);
+      }
+      .light .message-item {
+        background-color: hsla(0, 0%, 100%, 0.7);
+      }
+      .light .message-item.success {
+        border-color: hsl(145, 70%, 80%);
+        color: hsl(145, 70%, 20%);
+      }
+       .light .message-item.info {
+        border-color: hsl(210, 100%, 85%);
+        color: hsl(210, 90%, 40%);
+      }
+       .light .message-item.error {
+        border-color: hsl(0, 100%, 90%);
+        color: hsl(0, 90%, 40%);
       }
       
-      /* --- Animate list items with delay --- */
+      /* Animate list items with delay */
       .stagger-animation {
         opacity: 0;
         animation: fade-in-up 0.5s ease-out forwards;
       }
-      
       .stagger-table-row {
         opacity: 0;
         animation: slide-in-left 0.5s ease-out forwards;
       }
 
-      /* --- Custom Form Input Style --- */
+      /* Custom Form Input Style */
       .form-input, .form-select, .form-date {
         background-color: var(--background);
         border: 1px solid var(--border);
         color: var(--foreground);
         border-radius: var(--radius);
-        padding: 0.5rem 1rem; /* py-2 px-4 */
-        font-size: 0.875rem; /* text-sm */
+        padding: 0.4rem 0.75rem; /* Less bulky */
+        font-size: 0.875rem; 
         transition: all 0.3s ease-in-out;
         box-shadow: var(--shadow-sm);
         width: 100%;
@@ -377,27 +372,127 @@
         box-shadow: 0 0 0 3px var(--primary-light);
       }
       .dark .form-input:focus, .dark .form-select:focus, .dark .form-date:focus {
-         box-shadow: 0 0 0 3px hsl(210, 100%, 60%, 0.3);
+         box-shadow: 0 0 0 3px hsl(145, 70%, 45%, 0.3);
       }
+      
+      /* Bento Card Mouse-Follow Effect */
+      .bento-card {
+        background-color: var(--card);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        box-shadow: var(--shadow-lg);
+        transition: all 0.3s ease-in-out;
+        position: relative;
+        overflow: hidden;
+      }
+      .bento-card::before {
+        content: "";
+        position: absolute;
+        top: 0; left: 0;
+        width: 100%; height: 100%;
+        background: radial-gradient(
+          800px circle at var(--mouse-x, 0) var(--mouse-y, 0),
+          hsla(145, 70%, 50%, 0.15),
+          transparent 40%
+        );
+        opacity: 0;
+        transition: opacity 0.5s;
+        z-index: 0;
+      }
+      .bento-card:hover::before {
+        opacity: 1;
+      }
+      .bento-card > * {
+        position: relative;
+        z-index: 1;
+      }
+      .bento-card:hover {
+        transform: translateY(-6px);
+        border-color: var(--primary);
+      }
+      .bento-card i {
+        color: var(--primary);
+      }
+      
+      /* --- NEW: "VILLAIN ARC" TAGIFY STYLES --- */
+      :root {
+        --tagify-border-color: var(--border);
+        --tagify-focus-border-color: var(--primary);
+        --tagify-dd-bg-color: var(--card);
+        --tagify-dd-text-color: var(--foreground);
+        --tagify-dd-item-bg-color: var(--card);
+        --tagify-dd-item-hover-bg-color: var(--muted);
+      }
+      .dark {
+         --tagify-border-color: var(--border);
+      }
+      .tagify {
+        --tag-bg: var(--primary);
+        --tag-text-color: var(--primary-foreground);
+        --tag-remove-btn-color: var(--primary-foreground);
+        --tag-remove-btn-bg--hover: var(--primary-dark);
+        border: 0;
+        border-radius: var(--radius);
+        background-color: var(--background);
+        border: 1px solid var(--border);
+        /* Match our form input padding */
+        padding: 0.15rem 0.75rem; 
+        font-size: 0.875rem;
+      }
+      .dark .tagify {
+         background-color: var(--background);
+         --tag-bg: var(--primary);
+         --tag-text-color: var(--primary-foreground);
+         --tag-remove-btn-color: var(--primary-foreground);
+         --tag-remove-btn-bg--hover: var(--primary-dark);
+      }
+      .tagify:hover {
+        border-color: var(--border);
+      }
+      .tagify.tagify--focus {
+        border-color: var(--primary);
+        box-shadow: 0 0 0 3px hsl(145, 70%, 45%, 0.3);
+      }
+      .tagify__tag {
+        font-weight: 600;
+        font-size: 0.8rem;
+        padding-top: 0.2em;
+        padding-bottom: 0.2em;
+      }
+      .dark .tagify__tag {
+        --tag-text-color: var(--primary-foreground);
+      }
+      .tagify__input {
+        /* Match our placeholder color */
+        color: var(--muted-foreground); 
+      }
+      .dark .tagify__input {
+        color: var(--muted-foreground);
+      }
+      /* --- END NEW TAGIFY STYLES --- */
+
     </style>
   </head>
   <body class="bg-background text-foreground">
+    
+    <div class="aurora-bg"></div>
+    
     <div class="relative min-h-screen" x-data="{ sidebarOpen: false }">
       
       <aside 
-        class="w-64 bg-card border-r border-border flex flex-col shadow-lg fixed z-30 h-screen transition-transform duration-300 ease-in-out"
+        class="w-60 bg-card/50 backdrop-blur-lg border-r border-border/50 flex flex-col shadow-lg fixed z-30 h-screen transition-transform duration-300 ease-in-out"
         :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full'"
       >
-        <div class="p-6 border-b border-border">
-          <div class="flex items-center space-x-3">
+        <div class="p-5 border-b border-border/50"> 
+          <div class="flex items-center space-x-2.5"> 
             <div
-              class="w-10 h-10 btn-primary rounded-xl flex items-center justify-center text-primary-foreground font-bold shadow-lg"
-            >
+              class="w-9 h-9 btn-primary rounded-lg flex items-center justify-center text-primary-foreground font-bold shadow-lg"
+            > 
               ES
             </div>
             <div>
               <h1 class="font-bold text-lg text-foreground">EduShare</h1> 
-              <p class="text-sm text-muted-foreground capitalize">
+              <p class="text-xs text-muted-foreground capitalize"> 
                 {% if user.is_authenticated %} 
                   {{ user.role|default:"User" }}
                 {% endif %}
@@ -405,19 +500,19 @@
             </div>
           </div>
         </div>
-        <nav class="p-4 flex-1 overflow-y-auto">
-          <ul class="space-y-2">
+        <nav class="p-3 flex-1 overflow-y-auto"> 
+          <ul class="space-y-1.5"> 
             
             <li>
               <a
                 href="{% url 'dashboard' %}"
-                class="flex items-center space-x-3 px-4 py-3 rounded-lg font-medium
+                class="flex items-center space-x-3 px-3 py-2.5 rounded-lg text-sm font-medium
                        {% if request.resolver_match.url_name == 'dashboard' %}
                          sidebar-active
                        {% else %}
-                         text-foreground/80 hover:text-foreground hover:bg-muted
+                         text-foreground/80 hover:text-foreground hover:bg-muted/50
                        {% endif %}"
-              >
+              > 
                 <i data-lucide="bar-chart-3" class="w-5 h-5"></i>
                 <span>Dashboard</span>
               </a>
@@ -426,13 +521,13 @@
             <li>
               <a
                 href="{% url 'notes:note-list' %}"
-                class="flex items-center space-x-3 px-4 py-3 rounded-lg font-medium
-                       {% if request.resolver_match.app_name == 'notes' %}
+                class="flex items-center space-x-3 px-3 py-2.5 rounded-lg text-sm font-medium
+                       {% if request.resolver_match.app_name == 'notes' and request.resolver_match.url_name != 'my-notes' and request.resolver_match.url_name != 'note-create' %}
                          sidebar-active
                        {% else %}
-                         text-foreground/80 hover:text-foreground hover:bg-muted
+                         text-foreground/80 hover:text-foreground hover:bg-muted/50
                        {% endif %}"
-              >
+              > 
                 <i data-lucide="notebook-tabs" class="w-5 h-5"></i>
                 <span>All Notes</span>
               </a>
@@ -441,13 +536,13 @@
             <li>
               <a
                 href="{% url 'categories:category-list' %}"
-                class="flex items-center space-x-3 px-4 py-3 rounded-lg font-medium
+                class="flex items-center space-x-3 px-3 py-2.5 rounded-lg text-sm font-medium
                        {% if request.resolver_match.app_name == 'categories' %}
                          sidebar-active
                        {% else %}
-                         text-foreground/80 hover:text-foreground hover:bg-muted
+                         text-foreground/80 hover:text-foreground hover:bg-muted/50
                        {% endif %}"
-              >
+              > 
                 <i data-lucide="folder-kanban" class="w-5 h-5"></i>
                 <span>Categories</span>
               </a>
@@ -457,13 +552,13 @@
             <li>
               <a
                 href="{% url 'notes:my-notes' %}"
-                class="flex items-center space-x-3 px-4 py-3 rounded-lg font-medium
+                class="flex items-center space-x-3 px-3 py-2.5 rounded-lg text-sm font-medium
                        {% if request.resolver_match.url_name == 'my-notes' %}
                          sidebar-active
                        {% else %}
-                         text-foreground/80 hover:text-foreground hover:bg-muted
+                         text-foreground/80 hover:text-foreground hover:bg-muted/50
                        {% endif %}"
-              >
+              > 
                 <i data-lucide="user-round-pen" class="w-5 h-5"></i>
                 <span>My Notes</span>
               </a>
@@ -471,13 +566,13 @@
             <li>
               <a
                 href="{% url 'notes:note-create' %}"
-                class="flex items-center space-x-3 px-4 py-3 rounded-lg font-medium
+                class="flex items-center space-x-3 px-3 py-2.5 rounded-lg text-sm font-medium
                        {% if request.resolver_match.url_name == 'note-create' %}
                          sidebar-active
                        {% else %}
-                         text-foreground/80 hover:text-foreground hover:bg-muted
+                         text-foreground/80 hover:text-foreground hover:bg-muted/50
                        {% endif %}"
-              >
+              > 
                 <i data-lucide="upload" class="w-5 h-5"></i>
                 <span>Upload Note</span>
               </a>
@@ -486,13 +581,13 @@
 
           </ul>
         </nav>
-        <div class="p-4 border-t border-border">
+        <div class="p-3 border-t border-border/50"> 
           <form method="post" action="{% url 'logout' %}">
             {% csrf_token %}
             <button 
               type="submit" 
-              class="w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-foreground/80 hover:text-destructive hover:bg-destructive/10 transition-colors duration-300 font-medium"
-            >
+              class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-lg text-foreground/80 hover:text-destructive hover:bg-destructive/10 transition-colors duration-300 text-sm font-medium"
+            > 
               <i data-lucide="log-out" class="w-5 h-5"></i>
               <span>Logout</span>
             </button>
@@ -514,49 +609,59 @@
 
       <main 
         class="flex-1 flex flex-col overflow-auto transition-all duration-300 ease-in-out"
-        :class="sidebarOpen ? 'lg:pl-64' : 'pl-0'"
+        :class="sidebarOpen ? 'lg:pl-60' : 'pl-0'"
       >
-        <header class="bg-card/80 backdrop-blur-md border-b border-border px-6 py-4 sticky top-0 z-10">
+        <header class="bg-card/30 backdrop-blur-lg border-b border-border/50 px-6 py-3 sticky top-0 z-10">
           <div class="flex items-center justify-between">
             
             <div class="flex items-center gap-2">
               <button 
                 @click="sidebarOpen = !sidebarOpen" 
-                class="p-2 rounded-lg hover:bg-muted text-muted-foreground"
+                class="p-2 rounded-lg hover:bg-muted/50 text-muted-foreground"
               >
                 <i data-lucide="menu" class="w-6 h-6"></i>
               </button>
 
               <div>
-                <h2 class="text-2xl font-semibold text-foreground">
+                <h2 class="text-xl font-semibold text-foreground"> 
                   {% block page_title %}Dashboard{% endblock %}
                 </h2>
                 <p class="text-sm text-muted-foreground">
-                  Welcome to EduShare! 👋
+                  {% if user.is_authenticated and user.first_name %}
+                    Welcome back, {{ user.first_name }}! 👋
+                  {% else %}
+                    Welcome to EduShare! 👋
+                  {% endif %}
                 </p>
               </div>
             </div>
 
             <div class="flex items-center space-x-4">
-              <div class="relative">
-                <button
-                  class="p-2 rounded-full hover:bg-muted text-muted-foreground transition-colors relative"
-                >
-                  <i data-lucide="bell" class="w-5 h-5"></i>
-                  </button>
-              </div>
+              <button
+                id="theme-toggle"
+                class="p-2 rounded-full hover:bg-muted/50 text-muted-foreground transition-colors relative"
+              >
+                <i data-lucide="sun" class="h-5 w-5 light-icon"></i>
+                <i data-lucide="moon" class="h-5 w-5 dark-icon"></i>
+              </button>
+              
+              <button
+                class="p-2 rounded-full hover:bg-muted/50 text-muted-foreground transition-colors relative"
+              >
+                <i data-lucide="bell" class="w-5 h-5"></i>
+              </button>
 
               <div class="flex items-center space-x-3">
                 <div
-                  class="w-10 h-10 btn-primary rounded-full flex items-center justify-center text-primary-foreground font-medium text-sm shadow-lg"
-                >
+                  class="w-9 h-9 btn-primary rounded-full flex items-center justify-center text-primary-foreground font-medium text-sm shadow-lg"
+                > 
                   {% if user.is_authenticated and user.first_name and user.last_name %} 
                     {{ user.first_name|first|upper }}{{ user.last_name|first|upper }} 
                   {% elif user.is_authenticated %} 
                     {{ user.username|first|upper }}
                   {% else %} G {% endif %}
                 </div>
-                <div class="text-sm">
+                <div class="text-sm hidden md:block">
                    <p class="text-sm font-medium text-foreground capitalize">
                      {% if user.is_authenticated %} 
                        {{ user.get_full_name }}
@@ -568,7 +673,7 @@
           </div>
         </header>
 
-        <div class="p-6 flex-1 overflow-y-auto">
+        <div class="p-6 flex-1 overflow-y-auto" id="main-content">
           
           {% if messages %}
             <ul class="message-list">
@@ -589,9 +694,9 @@
             </ul>
           {% endif %}
           
-          <div class_="animate-fade-in-up">
+          <div class="animate-fade-in-up">
             {% block content %}
-            <h1 class="text-2xl font-bold">Welcome to your Django Project!</h1>
+            <h1 classs="text-2xl font-bold">Welcome to your Django Project!</h1>
             <p class="mt-2">
               This is the `base.html` template. The styles and icons are now
               working.
@@ -601,7 +706,7 @@
         </div>
       </main>
     </div>
-
+    
     <script>
       lucide.createIcons()
       
@@ -618,6 +723,57 @@
           item.style.setProperty("--delay", `${index * 75}ms`);
           item.style.animationDelay = item.style.getPropertyValue("--delay");
         });
+
+        // Bento Card Mouse-Follow Effect
+        const mainContent = document.getElementById('main-content');
+        if (mainContent) {
+            mainContent.addEventListener('mousemove', (e) => {
+                const cards = document.querySelectorAll('.bento-card');
+                cards.forEach(card => {
+                    const rect = card.getBoundingClientRect();
+                    const x = e.clientX;
+                    const y = e.clientY;
+                    const cardX = rect.left;
+                    const cardY = rect.top;
+                    const mouseX = x - cardX;
+                    const mouseY = y - cardY;
+                    
+                    card.style.setProperty('--mouse-x', `${mouseX}px`);
+                    card.style.setProperty('--mouse-y', `${mouseY}px`);
+                });
+            });
+        }
+        
+        // --- Theme Toggle Logic ---
+        const themeToggleBtn = document.getElementById('theme-toggle');
+        const htmlElement = document.documentElement;
+
+        function applyTheme(theme) {
+            if (theme === 'dark') {
+                htmlElement.classList.add('dark');
+                localStorage.theme = 'dark';
+            } else {
+                htmlElement.classList.remove('dark');
+                localStorage.theme = 'light';
+            }
+            lucide.createIcons(); 
+        }
+        
+        const savedTheme = localStorage.theme;
+        if (savedTheme) {
+              applyTheme(savedTheme);
+        }
+        else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+              applyTheme('dark');
+        } 
+
+        if (themeToggleBtn) {
+            themeToggleBtn.addEventListener('click', () => {
+                const newTheme = htmlElement.classList.contains('dark') ? 'light' : 'dark';
+                applyTheme(newTheme);
+            });
+        }
+
       });
     </script>
     

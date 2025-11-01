@@ -17,6 +17,11 @@ class User(AbstractUser):
     date_of_birth = models.DateField(blank=True, null=True)
     bio = models.TextField(blank=True, null=True)
     
+    # --- NEW: "VILLAIN ARC" FEATURE ---
+    # This will be the foundation for our gamification and leaderboards
+    reputation = models.IntegerField(default=0)
+    # --- END NEW FEATURE ---
+    
     theme_preference = models.CharField(
         max_length=10,
         choices=[('light', 'Light'), ('dark', 'Dark'), ('system', 'System')],
