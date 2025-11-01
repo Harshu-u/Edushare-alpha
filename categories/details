@@ -1,0 +1,60 @@
+User Roles
+
+Student
+Upload notes (PDF, DOCX, PPT).
+Edit or delete only their own notes.
+View notes uploaded by others.
+Rate others’ notes.
+
+Teacher
+Upload notes.
+Edit or delete any note (moderator role).
+View all notes.
+Rate notes.
+
+Other/Guest
+Can only view public notes.
+Cannot upload or delete.
+
+📝 Core Features
+Authentication system with role-based access (Student / Teacher).
+
+Notes Management:
+Upload, edit, delete, share notes.
+Store files properly (PDF, DOCX, PPT).
+
+Categories & Tags:
+Organize notes by subject, course, semester.
+
+Rating System:
+Users can rate notes (1–5 stars or upvote/downvote).
+Show average rating on each note.
+Sort/filter notes by rating.
+
+Search:
+Search notes by subject, uploader, or rating.
+
+Permissions:
+Students → can only delete their own notes.
+
+Teachers → can delete any note.
+Guest → can only see any note.
+
+Role-based authentication system (Student/Teacher/Guest) 
+
+Beautiful file upload interface with drag-and-drop for PDF, DOCX, PPT 
+
+Notes management with create, edit, delete, and view functionality
+
+Interactive rating system with star ratings and visual feedback
+
+Advanced search and filtering by subject, uploader, rating, and tags
+
+Category and tag organization system with color-coded labels
+Responsive modern UI with smooth animations and hover effects
+
+Permission-based access control (students edit own notes, teachers moderate all)
+
+File preview and download capabilities
+
+Dashboard with statistics and recent activity animations
