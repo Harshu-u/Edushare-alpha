@@ -66,11 +66,19 @@ class NoteDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
         return self.request.user == note.uploader or self.request.user.is_teacher()
 
 class RateNoteView(LoginRequiredMixin, View):
+    """Accepts rating POSTs. Returns JSON when requested via AJAX, otherwise redirects.
+
+    Endpoint: POST /notes/<pk>/rate/
+    POST params: rating=int 1-5
+    """
     def post(self, request, pk):
         note = get_object_or_404(Note, pk=pk)
-        rating_value = int(request.POST.get('rating'))
+        try:
+            rating_value = int(request.POST.get('rating'))
+        except (TypeError, ValueError):
+            rating_value = None
 
-        if 1 <= rating_value <= 5:
+        if rating_value and 1 <= rating_value <= 5:
             rating, created = Rating.objects.get_or_create(
                 note=note,
                 user=request.user,
@@ -87,8 +95,20 @@ class RateNoteView(LoginRequiredMixin, View):
             note.total_ratings = ratings.count()
             note.save()
 
+            # If AJAX (X-Requested-With) return JSON
+            if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+                from django.http import JsonResponse
+                return JsonResponse({
+                    'success': True,
+                    'average_rating': float(note.average_rating),
+                    'total_ratings': note.total_ratings,
+                })
+
             messages.success(request, 'Rating submitted successfully!')
         else:
+            if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+                from django.http import JsonResponse
+                return JsonResponse({'success': False, 'error': 'Invalid rating value'}, status=400)
             messages.error(request, 'Invalid rating value!')
 
         return redirect('note-detail', pk=pk)
