@@ -1,0 +1,29 @@
+{% extends 'base/base.html' %}
+
+{% block content %}
+<div class="card p-4">
+  <h2>{{ note.title }}</h2>
+  <p>By: {{ note.uploader.username }}</p>
+  <p>Category: {{ note.category.name }}</p>
+  <p>Average Rating: {{ note.average_rating|default:0 }} ({{ note.total_ratings }})</p>
+
+  <div>
+    <a href="{{ note.file.url }}" class="btn btn-outline-primary" target="_blank">Download / Preview</a>
+  </div>
+
+  {% if user.is_authenticated %}
+    <form method="post" action="{% url 'note-rate' note.pk %}" id="rating-form">
+      {% csrf_token %}
+      <label>Rate this note:</label>
+      <select name="rating" id="rating-select">
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+      </select>
+      <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+  {% endif %}
+</div>
+{% endblock %}
