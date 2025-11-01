@@ -1,0 +1,79 @@
+{% extends "core/base.html" %}
+
+{% block title %}{{ form_title|default:"Note Form" }}{% endblock %}
+
+{% block page_title %}{{ form_title|default:"Note Form" }}{% endblock %}
+
+{% block content %}
+<div class="bg-card p-6 md:p-8 rounded-2xl shadow-lg border border-border max-w-4xl mx-auto animate-fade-in-up">
+  
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      {% if form.non_field_errors %}
+        {% for error in form.non_field_errors %}
+          <div class="md:col-span-2 bg-destructive/10 text-destructive text-sm p-3 rounded-lg">{{ error }}</div>
+        {% endfor %}
+      {% endif %}
+
+      <div class="space-y-2 md:col-span-2">
+        <label for="{{ form.title.id_for_label }}" class="block text-sm font-medium text-foreground mb-1">{{ form.title.label }}</label>
+        {{ form.title }}
+        {% if form.title.help_text %}<p class="text-xs text-muted-foreground mt-1">{{ form.title.help_text }}</p>{% endif %}
+        {% for error in form.title.errors %}<div class="text-destructive text-xs mt-1">{{ error }}</div>{% endfor %}
+      </div>
+      
+      <div class="space-y-2">
+        <label for="{{ form.category.id_for_label }}" class="block text-sm font-medium text-foreground mb-1">{{ form.category.label }}</label>
+        {{ form.category }}
+        {% if form.category.help_text %}<p class="text-xs text-muted-foreground mt-1">{{ form.category.help_text }}</p>{% endif %}
+        {% for error in form.category.errors %}<div class="text-destructive text-xs mt-1">{{ error }}</div>{% endfor %}
+      </div>
+      
+      <div class="space-y-2">
+        <label for="{{ form.file.id_for_label }}" class="block text-sm font-medium text-foreground mb-1">{{ form.file.label }}</label>
+        {{ form.file }}
+        {% if form.file.help_text %}<p class="text-xs text-muted-foreground mt-1">{{ form.file.help_text }}</p>{% endif %}
+        {% for error in form.file.errors %}<div class="text-destructive text-xs mt-1">{{ error }}</div>{% endfor %}
+        
+        {% if object.file %}
+        <p class="text-xs text-muted-foreground mt-1">
+          Currently: <a href="{{ object.file.url }}" target="_blank" class="text-primary hover:underline">{{ object.file.name }}</a>
+        </p>
+        {% endif %}
+      </div>
+
+      <div class="space-y-2 md:col-span-2">
+        <label for="{{ form.description.id_for_label }}" class="block text-sm font-medium text-foreground mb-1">{{ form.description.label }}</label>
+        {{ form.description }}
+        {% if form.description.help_text %}<p class="text-xs text-muted-foreground mt-1">{{ form.description.help_text }}</p>{% endif %}
+        {% for error in form.description.errors %}<div class="text-destructive text-xs mt-1">{{ error }}</div>{% endfor %}
+      </div>
+      
+      <div class="space-y-2 md:col-span-2 flex items-center gap-x-3">
+        {{ form.is_public }}
+        <div>
+          <label for="{{ form.is_public.id_for_label }}" class="block text-sm font-medium text-foreground">{{ form.is_public.label }}</label>
+          {% if form.is_public.help_text %}<p class="text-xs text-muted-foreground">{{ form.is_public.help_text }}</p>{% endif %}
+          {% for error in form.is_public.errors %}<div class="text-destructive text-xs mt-1">{{ error }}</div>{% endfor %}
+        </div>
+      </div>
+
+    </div>
+
+    <div class="mt-8 pt-6 border-t border-border flex items-center gap-4">
+      <button 
+        type="submit" 
+        class="btn-primary flex items-center gap-2 px-6 py-2 rounded-lg text-sm font-medium"
+      >
+        <i data-lucide="save" class="w-4 h-4"></i>
+        Save Note
+      </button>
+      <a href="{{ object.get_absolute_url|default:request.META.HTTP_REFERER|default_if_none:request.build_absolute_uri|default:'/' }}" class="text-sm font-medium text-muted-foreground transition-all hover:text-primary hover:underline">
+        Cancel
+      </a>
+    </div>
+  </form>
+</div>
+{% endblock %}

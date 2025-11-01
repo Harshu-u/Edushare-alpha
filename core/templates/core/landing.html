@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en" class=""> <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to EduShare</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <script>
+      tailwind.config = {
+        darkMode: ["class"],
+        theme: {
+          extend: {
+            borderRadius: {
+              lg: "var(--radius)",
+              md: "calc(var(--radius) - 2px)",
+              sm: "calc(var(--radius) - 4px)",
+            },
+            colors: {
+              background: "var(--background)",
+              foreground: "var(--foreground)",
+              card: {
+                DEFAULT: "var(--card)",
+                foreground: "var(--card-foreground)",
+              },
+              popover: {
+                DEFAULT: "var(--popover)",
+                foreground: "var(--popover-foreground)",
+              },
+              primary: {
+                light: "var(--primary-light)",
+                DEFAULT: "var(--primary)",
+                dark: "var(--primary-dark)",
+                foreground: "var(--primary-foreground)",
+              },
+              secondary: {
+                light: "var(--secondary-light)",
+                DEFAULT: "var(--secondary)",
+                dark: "var(--secondary-dark)",
+                foreground: "var(--secondary-foreground)",
+              },
+              muted: {
+                DEFAULT: "var(--muted)",
+                foreground: "var(--muted-foreground)",
+              },
+              accent: {
+                DEFAULT: "var(--accent)",
+                foreground: "var(--accent-foreground)",
+              },
+              destructive: {
+                DEFAULT: "var(--destructive)",
+                foreground: "var(--destructive-foreground)",
+              },
+              border: "var(--border)",
+              input: "var(--input)",
+              ring: "var(--ring)",
+            },
+            fontFamily: {
+              sans: ["var(--font-sans)", "system-ui", "sans-serif"],
+              serif: ["var(--font-serif)"],
+              mono: ["var(--font-mono)"],
+            },
+            keyframes: {
+              "gradient-animation": {
+                "0%": { backgroundPosition: "0% 50%" },
+                "50%": { backgroundPosition: "100% 50%" },
+                "100%": { backgroundPosition: "0% 50%" },
+              },
+              "fadeIn": {
+                "from": { opacity: 0, transform: "translateY(20px)" },
+                "to": { opacity: 1, transform: "translateY(0)" },
+              },
+              "background-pan": {
+                "0%": { backgroundPosition: "0% 50%" },
+                "50%": { backgroundPosition: "100% 50%" },
+                "100%": { backgroundPosition: "0% 50%" },
+              },
+            },
+            animation: {
+              "gradient-pulse": "gradient-animation 6s ease-in-out infinite",
+              "fade-in-up": "fadeIn 0.6s ease-out forwards",
+              "background-pan": "background-pan 10s ease-in-out infinite",
+            },
+          },
+        },
+      }
+    </script>
+
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style type="text/css">
+      :root {
+        --background: hsl(0, 0%, 100%);
+        --foreground: hsl(222, 30%, 15%);
+        --card: hsl(0, 0%, 100%);
+        --card-foreground: hsl(222, 30%, 15%);
+        --popover: hsl(0, 0%, 100%);
+        --popover-foreground: hsl(222, 30%, 15%);
+        
+        --primary-light: hsl(210, 100%, 80%);
+        --primary: hsl(210, 100%, 50%);
+        --primary-dark: hsl(260, 100%, 55%); 
+        --primary-foreground: hsl(0, 0%, 100%);
+
+        --secondary-light: hsl(186, 100%, 80%);
+        --secondary: hsl(186, 100%, 38%);
+        --secondary-dark: hsl(186, 100%, 28%);
+        --secondary-foreground: hsl(0, 0%, 100%);
+        
+        --muted: hsl(220, 20%, 94%);
+        --muted-foreground: hsl(215, 16%, 47%);
+        --accent: hsl(36, 100%, 50%);
+        --accent-foreground: hsl(222, 30%, 15%);
+        --destructive: hsl(0, 84%, 60%);
+        --destructive-foreground: hsl(0, 0%, 100%);
+        --border: hsl(220, 20%, 90%);
+        --input: hsl(220, 20%, 90%);
+        --ring: hsl(210, 100%, 50%);
+        
+        --font-sans: "Inter", "system-ui", sans-serif;
+        --font-serif: Georgia, serif;
+        --font-mono: Menlo, monospace;
+        --radius: 12px;
+        --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+        --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+        --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+        --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+        --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+      }
+      .dark {
+        --background: hsl(222, 30%, 10%);
+        --foreground: hsl(210, 20%, 90%);
+        --card: hsl(222, 30%, 13%);
+        --card-foreground: hsl(210, 20%, 90%);
+        --popover: hsl(222, 30%, 10%);
+        --popover-foreground: hsl(210, 20%, 90%);
+        
+        --primary-light: hsl(210, 100%, 70%);
+        --primary: hsl(210, 100%, 60%);
+        --primary-dark: hsl(260, 100%, 65%);
+        --primary-foreground: hsl(0, 0%, 100%);
+        
+        --secondary-light: hsl(186, 100%, 70%);
+        --secondary: hsl(186, 100%, 48%);
+        --secondary-dark: hsl(186, 100%, 38%);
+        --secondary-foreground: hsl(0, 0%, 100%);
+
+        --muted: hsl(222, 30%, 18%);
+        --muted-foreground: hsl(215, 16%, 55%);
+        --accent: hsl(36, 100%, 60%);
+        --accent-foreground: hsl(210, 20%, 90%);
+        --destructive: hsl(0, 84%, 70%);
+        --destructive-foreground: hsl(0, 0%, 100%);
+        --border: hsl(222, 30%, 25%);
+        --input: hsl(222, 30%, 25%);
+        --ring: hsl(210, 100%, 60%);
+      }
+      body {
+        font-family: var(--font-sans), system-ui, sans-serif;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
+      
+      .btn-primary {
+        color: var(--primary-foreground);
+        background: linear-gradient(
+          60deg, 
+          var(--primary), 
+          var(--primary-dark), 
+          var(--primary)
+        );
+        background-size: 300% 300%;
+        animation: gradient-animation 8s ease-in-out infinite;
+        transition: all 0.3s ease-in-out;
+      }
+      .btn-primary:hover {
+        transform: translateY(-4px) scale(1.05);
+        box-shadow: var(--shadow-xl);
+      }
+      
+      .btn-secondary {
+        color: var(--foreground);
+        background-color: var(--card);
+        border: 1px solid var(--border);
+        transition: all 0.3s ease-in-out;
+      }
+      .dark .btn-secondary {
+        color: var(--foreground);
+      }
+      .btn-secondary:hover {
+         transform: translateY(-4px) scale(1.05);
+         box-shadow: var(--shadow-lg);
+         border-color: var(--primary);
+         color: var(--primary);
+      }
+
+      /* Ensure icons in the theme toggle swap correctly */
+      .dark #theme-toggle .dark-icon {
+        display: block;
+      }
+      .dark #theme-toggle .light-icon {
+        display: none;
+      }
+      #theme-toggle .dark-icon {
+        display: none;
+      }
+      #theme-toggle .light-icon {
+        display: block;
+      }
+      
+      .hero-gradient-text {
+        background: linear-gradient(
+          60deg, 
+          var(--primary), 
+          var(--primary-dark)
+        );
+        /* --- FIX IS HERE --- */
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+      
+      .feature-card {
+         transition: all 0.3s ease-in-out;
+      }
+      .feature-card:hover {
+        transform: translateY(-8px) scale(1.03);
+        box-shadow: var(--shadow-xl);
+        border-color: var(--primary);
+      }
+      .feature-card:hover i {
+        transform: scale(1.1) rotate(5deg);
+        color: var(--primary);
+      }
+       .feature-card i {
+         transition: all 0.3s ease-in-out;
+         color: var(--primary-dark);
+       }
+
+    </style>
+</head>
+<body class="bg-background text-foreground min-h-screen flex flex-col transition-colors duration-300">
+
+    <header class="w-full bg-card/90 backdrop-blur-md shadow-sm sticky top-0 z-50 border-b border-border">
+        <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex-shrink-0 flex items-center gap-2">
+                    <div class="w-8 h-8 btn-primary rounded-lg flex items-center justify-center text-primary-foreground font-bold text-sm shadow-md">
+                      ES
+                    </div>
+                    <span class="text-xl font-bold text-foreground">
+                        EduShare
+                    </span>
+                </div>
+                
+                <div class="hidden md:flex md:space-x-8">
+                    <a href="#features" class="font-medium text-muted-foreground hover:text-primary transition-colors">Features</a>
+                    <a href="#" class="font-medium text-muted-foreground hover:text-primary transition-colors">Pricing</a>
+                    <a href="#" class="font-medium text-muted-foreground hover:text-primary transition-colors">About</a>
+                </div>
+                
+                <div class="flex items-center space-x-2">
+                    <a href="{% url 'register' %}" 
+                       class="btn-secondary hidden sm:inline-flex items-center justify-center px-4 py-2 text-sm font-medium rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2">
+                        Sign Up
+                    </a>
+                    <a href="{% url 'login' %}" 
+                       class="btn-primary inline-flex items-center justify-center px-4 py-2 text-sm font-medium rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2">
+                        Login
+                    </a>
+                    
+                    <button id="theme-toggle" class="p-2 rounded-lg hover:bg-muted text-foreground transition-colors">
+                        <i data-lucide="sun" class="h-5 w-5 light-icon"></i>
+                        <i data-lucide="moon" class="h-5 w-5 dark-icon"></i>
+                        <span class="sr-only">Toggle theme</span>
+                    </button>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="flex-grow">
+        
+        <section class="flex items-center justify-center py-24 sm:py-32 px-4 sm:px-6 lg:px-8 overflow-hidden">
+            <div class="max-w-3xl mx-auto text-center animate-fade-in-up">
+                <h1 class="text-4xl sm:text-5xl md:text-7xl font-extrabold tracking-tight text-foreground">
+                    The Future of
+                    <span class="block hero-gradient-text xl:inline mt-2">Notes Sharing</span>
+                </h1>
+                <p class="mt-6 text-lg sm:text-xl text-muted-foreground max-w-xl mx-auto">
+                    A unified platform to upload, discover, and rate notes.
+                    Streamline your studies today.
+                </p>
+                <div class="mt-10 flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4">
+                    <a href="{% url 'register' %}" 
+                       class="btn-primary inline-flex items-center justify-center px-8 py-3 text-base font-medium rounded-lg shadow-lg focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2">
+                        Get Started
+                    </a>
+                    <a href="#features" 
+                       class="btn-secondary inline-flex items-center justify-center px-8 py-3 text-base font-medium rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2">
+                        Learn More
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <section id="features" class="py-20 bg-muted/50">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center">
+                    <h2 class="text-base font-semibold text-primary-dark tracking-wide uppercase">All-in-One</h2>
+                    <p class="mt-2 text-3xl font-extrabold text-foreground sm:text-4xl">
+                        A Better Experience for Everyone
+                    </p>
+                </div>
+
+                <div class="mt-16 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+                    <div class="feature-card bg-card p-6 rounded-2xl shadow-lg border border-border">
+                        <div class="flex-shrink-0">
+                            <i data-lucide="upload-cloud" class="h-10 w-10"></i>
+                        </div>
+                        <h3 class="mt-4 text-xl font-bold text-foreground">Upload Notes</h3>
+                        <p class="mt-2 text-base text-muted-foreground">
+                            Easily upload your PDF, DOCX, and PPT files with a simple drag-and-drop interface.
+                        </p>
+                    </div>
+
+                    <div class="feature-card bg-card p-6 rounded-2xl shadow-lg border border-border">
+                        <div class="flex-shrink-0">
+                            <i data-lucide="search" class="h-10 w-10"></i>
+                        </div>
+                        <h3 class="mt-4 text-xl font-bold text-foreground">Discover & Search</h3>
+                        <p class="mt-2 text-base text-muted-foreground">
+                            Find the exact notes you need by searching by subject, category, uploader, or rating.
+                        </d>
+                    </div>
+
+                    <div class="feature-card bg-card p-6 rounded-2xl shadow-lg border border-border">
+                        <div class="flex-shrink-0">
+                            <i data-lucide="star" class="h-10 w-10"></i>
+                        </div>
+                        <h3 class="mt-4 text-xl font-bold text-foreground">Rate & Review</h3>
+                        <p class="mt-2 text-base text-muted-foreground">
+                           Help the community by rating notes. Sort by top-rated to find the best materials.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-background border-t border-border">
+        <div class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8 text-center">
+            <p class="text-base text-muted-foreground">
+                &copy; 2025 EduShare. All rights reserved.
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            // 1. Initialize Lucide Icons
+            lucide.createIcons();
+
+            // 2. Dark Mode Toggle Logic
+            const themeToggleBtn = document.getElementById('theme-toggle');
+            const htmlElement = document.documentElement;
+
+            function applyTheme(theme) {
+                if (theme === 'dark') {
+                    htmlElement.classList.add('dark');
+                    localStorage.theme = 'dark';
+                } else {
+                    htmlElement.classList.remove('dark');
+                    localStorage.theme = 'light';
+                }
+                lucide.createIcons(); // Re-run to swap icons
+            }
+
+            const savedTheme = localStorage.theme || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            applyTheme(savedTheme);
+
+            themeToggleBtn.addEventListener('click', () => {
+                const newTheme = htmlElement.classList.contains('dark') ? 'light' : 'dark';
+                applyTheme(newTheme);
+            });
+        });
+    </script>
+</body>
+</html>

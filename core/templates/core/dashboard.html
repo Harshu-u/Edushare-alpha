@@ -1,0 +1,229 @@
+{% extends "core/base.html" %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block page_title %}Dashboard{% endblock %}
+
+{% block content %}
+
+<div class="animate-fade-in-up">
+
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+    
+    <div class="stat-card bg-card p-6 rounded-2xl shadow-lg border border-border" style="animation-delay: 100ms;">
+      <div class="flex items-center justify-between">
+        <div>
+          <p class="text-muted-foreground text-sm font-medium">Total Notes</p>
+          <p class="text-3xl font-bold text-foreground">
+            {{ note_count|default:"0" }}
+          </p>
+        </div>
+        <div class="w-12 h-12 rounded-lg flex items-center justify-center bg-blue-100 dark:bg-blue-500/10 transition-all duration-300">
+          <i data-lucide="notebook-tabs" class="w-6 h-6 text-blue-600 dark:text-blue-400"></i>
+        </div>
+      </div>
+    </div>
+
+    <div class="stat-card bg-card p-6 rounded-2xl shadow-lg border border-border" style="animation-delay: 200ms;">
+      <div class="flex items-center justify-between">
+        <div>
+          <p class="text-muted-foreground text-sm font-medium">Total Categories</p>
+          <p class="text-3xl font-bold text-foreground">
+            {{ category_count|default:"0" }}
+          </p>
+        </div>
+        <div class="w-12 h-12 rounded-lg flex items-center justify-center bg-green-100 dark:bg-green-500/10 transition-all duration-300">
+          <i data-lucide="folder-kanban" class="w-6 h-6 text-green-600 dark:text-green-400"></i>
+        </div>
+      </div>
+    </div>
+
+    <div class="stat-card bg-card p-6 rounded-2xl shadow-lg border border-border" style="animation-delay: 300ms;">
+      <div class="flex items-center justify-between">
+        <div>
+          <p class="text-muted-foreground text-sm font-medium">Active Users</p>
+          <p class="text-3xl font-bold text-foreground">
+            {{ user_count|default:"0" }}
+          </p>
+        </div>
+        <div class="w-12 h-12 rounded-lg flex items-center justify-center bg-yellow-100 dark:bg-yellow-500/10 transition-all duration-300">
+          <i data-lucide="users" class="w-6 h-6 text-yellow-600 dark:text-yellow-400"></i>
+        </div>
+      </div>
+    </div>
+
+    <div class="stat-card bg-card p-6 rounded-2xl shadow-lg border border-border" style="animation-delay: 400ms;">
+      <div class="flex items-center justify-between">
+        <div>
+          <p class="text-muted-foreground text-sm font-medium">Avg. Rating</p>
+          <p class="text-3xl font-bold text-foreground">
+            {{ overall_avg_rating|default:"0.0" }} ★
+          </p>
+        </div>
+        <div class="w-12 h-12 rounded-lg flex items-center justify-center bg-indigo-100 dark:bg-indigo-500/10 transition-all duration-300">
+          <i data-lucide="star-half" class="w-6 h-6 text-indigo-600 dark:text-indigo-400"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="mt-6 grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+    <div class="lg:col-span-1 flex flex-col gap-6" style="animation-delay: 500ms;">
+      
+      {% if user.role == 'admin' or user.role == 'teacher' %}
+      <div class="bg-card p-6 rounded-2xl shadow-lg border border-border">
+        <h3 class="text-lg font-semibold text-foreground mb-4">Quick Actions</h3>
+        <div class="grid grid-cols-2 sm:grid-cols-3 gap-4">
+          <a href="{% url 'notes:note-create' %}" class="flex flex-col items-center justify-center p-4 bg-muted hover:bg-primary/10 rounded-lg transition-all text-muted-foreground hover:text-primary">
+            <i data-lucide="upload" class="w-8 h-8 mb-2"></i>
+            <span class="text-xs font-medium text-center">Upload Note</span>
+          </a>
+          <a href="{% url 'notes:note-list' %}" class="flex flex-col items-center justify-center p-4 bg-muted hover:bg-primary/10 rounded-lg transition-all text-muted-foreground hover:text-primary">
+            <i data-lucide="search" class="w-8 h-8 mb-2"></i>
+            <span class="text-xs font-medium text-center">Find Notes</span>
+          </a>
+          {% if user.role == 'admin' or user.is_teacher %}
+          <a href="{% url 'categories:category-create' %}" class="flex flex-col items-center justify-center p-4 bg-muted hover:bg-primary/10 rounded-lg transition-all text-muted-foreground hover:text-primary">
+            <i data-lucide="folder-plus" class="w-8 h-8 mb-2"></i>
+            <span class="text-xs font-medium text-center">Add Category</span>
+          </a>
+          {% endif %}
+        </div>
+      </div>
+      {% endif %}
+
+      <div class="bg-card p-6 rounded-2xl shadow-lg border border-border">
+        <h3 class="text-lg font-semibold text-foreground mb-4">Alerts & Info</h3>
+        <div class="space-y-3">
+          {% if pending_teachers_count > 0 %}
+            {% if user.role == 'admin' %}
+            <a href="{% url 'admin:core_user_changelist' %}?role__exact=teacher&is_active__exact=0" class="flex items-center gap-3 p-3 bg-yellow-100 dark:bg-yellow-500/10 rounded-lg group">
+              <i data-lucide="user-check" class="w-5 h-5 text-yellow-700 dark:text-yellow-400"></i>
+              <div>
+                <p class="text-sm font-medium text-yellow-800 dark:text-yellow-300">{{ pending_teachers_count }} Teacher Account{{ pending_teachers_count|pluralize }}</p>
+                <p class="text-xs text-yellow-700 dark:text-yellow-500 group-hover:underline">Pending Approval</p>
+              </div>
+            </a>
+            {% endif %}
+          {% endif %}
+          
+          <div class="flex items-center gap-3 p-3 bg-blue-100 dark:bg-blue-500/10 rounded-lg">
+            <i data-lucide="star" class="w-5 h-5 text-blue-700 dark:text-blue-400"></i>
+            <div>
+              <p class="text-sm font-medium text-blue-800 dark:text-blue-300">{{ unrated_notes_count }} Unrated Note{{ unrated_notes_count|pluralize }}</p>
+              <p class="text-xs text-blue-700 dark:text-blue-500">Go rate them!</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="lg:col-span-2 bg-card p-6 rounded-2xl shadow-lg border border-border" style="animation-delay: 600ms;">
+      <h3 class="text-lg font-semibold text-foreground">Notes per Category</h3>
+      <div class="h-96 mt-4">
+        <canvas id="categoryChart" data-labels='{{ category_chart_labels|escapejs }}' data-values='{{ category_chart_data|escapejs }}'></canvas>
+      </div>
+    </div>
+
+    <div class="lg:col-span-3 grid grid-cols-1 md:grid-cols-2 gap-6" style="animation-delay: 700ms;">
+      <div class="bg-card p-6 rounded-2xl shadow-lg border border-border">
+        <h3 class="text-lg font-semibold text-foreground mb-4">Top Rated Notes</h3>
+        <div class="space-y-3 max-h-96 overflow-y-auto pr-2">
+          {% for note in top_notes %}
+            <a href="{% url 'notes:note-detail' note.pk %}" class="block p-3 hover:bg-muted rounded-lg stagger-animation">
+              <div class="flex justify-between items-center">
+                <p class="font-medium text-foreground truncate">{{ note.title }}</p>
+                <span class="text-sm font-bold text-yellow-500">{{ note.average_rating|floatformat:1 }} ★</span>
+              </div>
+              <p class="text-xs text-muted-foreground">
+                By {{ note.uploader.first_name }} | {{ note.category.name }}
+              </p>
+            </a>
+          {% empty %}
+            <p class="text-sm text-muted-foreground text-center pt-4">No rated notes yet.</p>
+          {% endfor %}
+        </div>
+      </div>
+      
+      <div class="bg-card p-6 rounded-2xl shadow-lg border border-border">
+        <h3 class="text-lg font-semibold text-foreground mb-4">Recently Uploaded</h3>
+        <div class="space-y-3 max-h-96 overflow-y-auto pr-2">
+          {% for note in recent_notes %}
+            <a href="{% url 'notes:note-detail' note.pk %}" class="block p-3 hover:bg-muted rounded-lg stagger-animation">
+              <div class="flex justify-between items-center">
+                <p class="font-medium text-foreground truncate">{{ note.title }}</p>
+                <span class="text-xs text-muted-foreground">{{ note.created_at|timesince }} ago</span>
+              </div>
+              <p class="text-xs text-muted-foreground">
+                By {{ note.uploader.first_name }} | {{ note.category.name }}
+              </p>
+            </a>
+          {% empty %}
+            <p class="text-sm text-muted-foreground text-center pt-4">No notes uploaded yet.</p>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+    
+  </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    Chart.register(...(Chart.registerables || []));
+
+    // --- 1. Category Chart (Doughnut) ---
+    const categoryCtx = document.getElementById("categoryChart");
+    if (categoryCtx) {
+      let catLabels = [];
+      let catData = [];
+      try {
+        if (categoryCtx.dataset.labels) catLabels = JSON.parse(categoryCtx.dataset.labels);
+        if (categoryCtx.dataset.values) catData = JSON.parse(categoryCtx.dataset.values);
+      } catch (e) {
+        console.warn('Failed to parse category chart data', e);
+      }
+
+      new Chart(categoryCtx.getContext("2d"), {
+        type: "doughnut",
+        data: {
+          labels: catLabels,
+          datasets: [{
+            data: catData,
+            backgroundColor: [
+              "hsl(210, 100%, 50%)", // chart-1
+              "hsl(186, 100%, 38%)", // chart-2
+              "hsl(36, 100%, 50%)",  // chart-3
+              "hsl(142, 76%, 36%)", // chart-4
+              "hsl(350, 89%, 60%)", // chart-5
+              "hsl(260, 100%, 55%)", // primary-dark
+            ],
+            borderColor: 'var(--card)',
+            borderWidth: 4,
+          }],
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { 
+            legend: { 
+              position: "bottom",
+              labels: {
+                color: 'var(--muted-foreground)',
+                padding: 20,
+                font: {
+                  size: 14
+                }
+              }
+            } 
+          },
+        },
+      });
+    }
+  });
+</script>
+
+{% endblock %}

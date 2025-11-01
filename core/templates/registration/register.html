@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - EduShare</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <script>
+      tailwind.config = {
+        darkMode: ["class"],
+        theme: {
+          extend: {
+            borderRadius: {
+              lg: "var(--radius)",
+              md: "calc(var(--radius) - 2px)",
+              sm: "calc(var(--radius) - 4px)",
+            },
+            colors: {
+              background: "var(--background)",
+              foreground: "var(--foreground)",
+              card: {
+                DEFAULT: "var(--card)",
+                foreground: "var(--card-foreground)",
+              },
+              popover: {
+                DEFAULT: "var(--popover)",
+                foreground: "var(--popover-foreground)",
+              },
+              primary: {
+                light: "var(--primary-light)",
+                DEFAULT: "var(--primary)",
+                dark: "var(--primary-dark)",
+                foreground: "var(--primary-foreground)",
+              },
+              secondary: {
+                light: "var(--secondary-light)",
+                DEFAULT: "var(--secondary)",
+                dark: "var(--secondary-dark)",
+                foreground: "var(--secondary-foreground)",
+              },
+              muted: {
+                DEFAULT: "var(--muted)",
+                foreground: "var(--muted-foreground)",
+              },
+              accent: {
+                DEFAULT: "var(--accent)",
+                foreground: "var(--accent-foreground)",
+              },
+              destructive: {
+                DEFAULT: "var(--destructive)",
+                foreground: "var(--destructive-foreground)",
+              },
+              border: "var(--border)",
+              input: "var(--input)",
+              ring: "var(--ring)",
+            },
+            fontFamily: {
+              sans: ["var(--font-sans)"],
+              serif: ["var(--font-serif)"],
+              mono: ["var(--font-mono)"],
+            },
+            keyframes: {
+              "gradient-animation": {
+                "0%": { backgroundPosition: "0% 50%" },
+                "50%": { backgroundPosition: "100% 50%" },
+                "100%": { backgroundPosition: "0% 50%" },
+              },
+              "fadeIn": {
+                "from": { opacity: 0, transform: "translateY(20px)" },
+                "to": { opacity: 1, transform: "translateY(0)" },
+              },
+            },
+            animation: {
+              "gradient-pulse": "gradient-animation 15s ease-in-out infinite",
+              "fade-in-up": "fadeIn 0.6s ease-out forwards",
+            },
+          },
+        },
+      }
+    </script>
+    
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+    <style type="text/css">
+      :root {
+        --background: hsl(220, 20%, 97%);
+        --foreground: hsl(222, 30%, 15%);
+        --card: hsl(0, 0%, 100%);
+        --card-foreground: hsl(222, 30%, 15%);
+        --popover: hsl(0, 0%, 100%);
+        --popover-foreground: hsl(222, 30%, 15%);
+        
+        --primary-light: hsl(210, 100%, 80%);
+        --primary: hsl(210, 100%, 50%);
+        --primary-dark: hsl(260, 100%, 55%);
+        --primary-foreground: hsl(0, 0%, 100%);
+
+        --secondary-light: hsl(186, 100%, 80%);
+        --secondary: hsl(186, 100%, 38%);
+        --secondary-dark: hsl(186, 100%, 28%);
+        --secondary-foreground: hsl(0, 0%, 100%);
+        
+        --muted: hsl(220, 20%, 94%);
+        --muted-foreground: hsl(215, 16%, 47%);
+        --accent: hsl(36, 100%, 50%);
+        --accent-foreground: hsl(222, 30%, 15%);
+        --destructive: hsl(0, 84%, 60%);
+        --destructive-foreground: hsl(0, 0%, 100%);
+        --border: hsl(220, 20%, 90%);
+        --input: hsl(220, 20%, 90%);
+        --ring: hsl(210, 100%, 50%);
+        
+        --font-sans: "Inter", "system-ui", sans-serif;
+        --font-serif: Georgia, serif;
+        --font-mono: Menlo, monospace;
+        --radius: 12px;
+        --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+        --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+        --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+        --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+        --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+      }
+      .dark {
+        --background: hsl(222, 30%, 10%);
+        --foreground: hsl(210, 20%, 90%);
+        --card: hsl(222, 30%, 13%);
+        --card-foreground: hsl(210, 20%, 90%);
+        --popover: hsl(222, 30%, 10%);
+        --popover-foreground: hsl(210, 20%, 90%);
+        
+        --primary-light: hsl(210, 100%, 70%);
+        --primary: hsl(210, 100%, 60%);
+        --primary-dark: hsl(260, 100%, 65%);
+        --primary-foreground: hsl(0, 0%, 100%);
+        
+        --secondary-light: hsl(186, 100%, 70%);
+        --secondary: hsl(186, 100%, 48%);
+        --secondary-dark: hsl(186, 100%, 38%);
+        --secondary-foreground: hsl(0, 0%, 100%);
+
+        --muted: hsl(222, 30%, 18%);
+        --muted-foreground: hsl(215, 16%, 55%);
+        --accent: hsl(36, 100%, 60%);
+        --accent-foreground: hsl(210, 20%, 90%);
+        --destructive: hsl(0, 84%, 70%);
+        --destructive-foreground: hsl(0, 0%, 100%);
+        --border: hsl(222, 30%, 25%);
+        --input: hsl(222, 30%, 25%);
+        --ring: hsl(210, 100%, 60%);
+      }
+      body {
+        font-family: var(--font-sans), system-ui, sans-serif;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
+      
+      .btn-primary {
+        color: var(--primary-foreground);
+        background: linear-gradient(
+          60deg, 
+          var(--primary), 
+          var(--primary-dark), 
+          var(--primary)
+        );
+        background-size: 300% 300%;
+        animation: gradient-animation 8s ease-in-out infinite;
+        transition: all 0.3s ease-in-out;
+      }
+      .btn-primary:hover {
+        transform: translateY(-4px) scale(1.05);
+        box-shadow: var(--shadow-xl);
+      }
+
+      /* --- Custom Form Input Style --- */
+      .form-input, .form-select {
+        background-color: var(--background);
+        border: 1px solid var(--border);
+        color: var(--foreground);
+        border-radius: var(--radius);
+        padding: 0.75rem 1rem;
+        font-size: 0.875rem;
+        transition: all 0.3s ease-in-out;
+        box-shadow: var(--shadow-sm);
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+      }
+      .form-input:focus, .form-select:focus {
+        outline: none;
+        border-color: var(--primary);
+        box-shadow: 0 0 0 3px var(--primary-light);
+      }
+      .dark .form-input:focus, .dark .form-select:focus {
+         box-shadow: 0 0 0 3px hsl(210, 100%, 60%, 0.3);
+      }
+      .form-select-wrapper {
+        position: relative;
+      }
+      .form-select-wrapper::after {
+        content: '';
+        position: absolute;
+        top: 50%;
+        right: 1rem;
+        width: 0.5rem;
+        height: 0.5rem;
+        border-bottom: 2px solid var(--foreground);
+        border-right: 2px solid var(--foreground);
+        transform: translateY(-75%) rotate(45deg);
+        pointer-events: none;
+        opacity: 0.5;
+      }
+      
+      /* --- Animated Gradient Background --- */
+      .animated-gradient-bg {
+        background: linear-gradient(
+          -45deg, 
+          hsl(210, 100%, 70%), 
+          hsl(260, 100%, 80%), 
+          hsl(186, 100%, 70%),
+          hsl(36, 100%, 70%)
+        );
+        background-size: 400% 400%;
+        animation: gradient-pulse 15s ease-in-out infinite;
+      }
+      .dark .animated-gradient-bg {
+         background: linear-gradient(
+          -45deg, 
+          hsl(210, 100%, 20%), 
+          hsl(260, 100%, 25%), 
+          hsl(186, 100%, 15%),
+          hsl(222, 30%, 10%)
+        );
+        background-size: 400% 400%;
+        animation: gradient-pulse 15s ease-in-out infinite;
+      }
+      
+      /* --- Glassmorphism Card --- */
+      .glass-card {
+        background: hsla(0, 0%, 100%, 0.6);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border: 1px solid hsla(0, 0%, 100%, 0.2);
+        box-shadow: var(--shadow-2xl);
+      }
+      .dark .glass-card {
+         background: hsla(222, 30%, 13%, 0.6);
+         border: 1px solid hsla(222, 30%, 25%, 0.5);
+      }
+
+    </style>
+</head>
+<body class="animated-gradient-bg text-foreground flex items-center justify-center min-h-screen py-12 px-4">
+
+    <div class="w-full max-w-md p-8 md:p-10 rounded-2xl glass-card animate-fade-in-up">
+        <div class="text-center mb-8">
+             <div class="w-14 h-14 btn-primary rounded-2xl flex items-center justify-center text-primary-foreground font-bold text-2xl mx-auto mb-5 shadow-lg">
+                ES
+             </div>
+            <h1 class="text-3xl font-bold text-foreground">Create an Account</h1>
+            <p class="text-muted-foreground text-sm mt-2">Join EduShare Today</p>
+        </div>
+
+        <form method="post" action="{% url 'register' %}">
+            {% csrf_token %}
+            
+            <div class="space-y-5">
+                {% if form.non_field_errors %}
+                    {% for error in form.non_field_errors %}
+                        <div class="bg-destructive/10 text-destructive text-xs p-3 rounded-lg">{{ error }}</div>
+                    {% endfor %}
+                {% endif %}
+
+                <div class="grid grid-cols-2 gap-4">
+                  <div class="relative">
+                      <label for="{{ form.first_name.id_for_label }}" class="absolute -top-2.5 left-3 px-1 bg-card text-xs font-medium text-muted-foreground">First Name</label>
+                      {{ form.first_name }}
+                      {% for error in form.first_name.errors %}<div class="text-destructive text-xs mt-1">{{ error }}</div>{% endfor %}
+                  </div>
+                  
+                  <div class="relative">
+                      <label for="{{ form.last_name.id_for_label }}" class="absolute -top-2.5 left-3 px-1 bg-card text-xs font-medium text-muted-foreground">Last Name</label>
+                      {{ form.last_name }}
+                      {% for error in form.last_name.errors %}<div class="text-destructive text-xs mt-1">{{ error }}</div>{% endfor %}
+                  </div>
+                </div>
+                
+                <div class="relative">
+                    <label for="{{ form.email.id_for_label }}" class="absolute -top-2.5 left-3 px-1 bg-card text-xs font-medium text-muted-foreground">Email</label>
+                    {{ form.email }}
+                    {% for error in form.email.errors %}<div class="text-destructive text-xs mt-1">{{ error }}</div>{% endfor %}
+                </div>
+
+                <div class="relative">
+                    <label for="{{ form.role.id_for_label }}" class="absolute -top-2.5 left-3 px-1 bg-card text-xs font-medium text-muted-foreground">I am a...</label>
+                    <div class="form-select-wrapper">
+                      {{ form.role }}
+                    </div>
+                    {% for error in form.role.errors %}<div class="text-destructive text-xs mt-1">{{ error }}</div>{% endfor %}
+                </div>
+
+                <div class="border-t border-border/50 pt-5 space-y-5">
+                    <div class="relative">
+                        <label for="{{ form.username.id_for_label }}" class="absolute -top-2.5 left-3 px-1 bg-card text-xs font-medium text-muted-foreground">Username</label>
+                        {{ form.username }}
+                        {% for error in form.username.errors %}<div class="text-destructive text-xs mt-1">{{ error }}</div>{% endfor %}
+                    </div>
+
+                    <div class="relative">
+                        <label for="{{ form.password1.id_for_label }}" class="absolute -top-2.5 left-3 px-1 bg-card text-xs font-medium text-muted-foreground">Password</label>
+                        {{ form.password1 }}
+                        {% for error in form.password1.errors %}<div class="text-destructive text-xs mt-1">{{ error }}</div>{% endfor %}
+                    </div>
+                    
+                    <div class="relative">
+                        <label for="{{ form.password2.id_for_label }}" class="absolute -top-2.5 left-3 px-1 bg-card text-xs font-medium text-muted-foreground">Confirm Password</label>
+                        {{ form.password2 }}
+                        {% for error in form.password2.errors %}<div class="text-destructive text-xs mt-1">{{ error }}</div>{% endfor %}
+                    </div>
+                </div>
+
+            </div>
+
+            <button 
+                type="submit" 
+                class="btn-primary w-full px-4 py-3 rounded-lg text-sm font-semibold mt-8 tracking-wide"
+            >
+                Create Account
+            </button>
+        </form>
+        
+        <p class="text-center text-sm text-muted-foreground mt-8">
+            Already have an account? 
+            <a href="{% url 'login' %}" class="font-semibold text-primary hover:text-primary-dark hover:underline">
+                Login
+            </a>
+        </p>
+    </div>
+    
+    <script>
+        lucide.createIcons();
+    </script>
+
+</body>
+</html>

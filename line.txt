@@ -1,0 +1,2 @@
+source venv/Scripts/activate
+python manage.py runserver_plus 127.0.0.1:8000 --cert-file devcert.pem --key-file devkey.pem

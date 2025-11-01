@@ -1,11 +1,9 @@
 # Python
 __pycache__/
 *.py[cod]
-*$py.class
+*.pyc
 *.so
-.Python
 build/
-develop-eggs/
 dist/
 downloads/
 eggs/
@@ -20,11 +18,6 @@ wheels/
 .installed.cfg
 *.egg
 
-# Django
-*.log
-local_settings.py
-media/
-
 # Virtual Environment
 .env
 .venv
@@ -32,12 +25,18 @@ env/
 venv/
 ENV/
 
-# VS Code
+# Django
+*.log
+*.pot
+db.sqlite3
+media/
+staticfiles/
+
+# Local dev HTTPS certs (from campusconnect)
+devcert.pem
+devkey.pem
+devcombined.pem
+
+# IDE / VS Code
 .vscode/
-
-# SSL Certificates
-*.pem
-*.key
-*.crt
-
-# Static files
+.idea/
