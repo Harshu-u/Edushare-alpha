@@ -41,7 +41,7 @@
       </thead>
       <tbody class="divide-y divide-border/50">
         {% for category in categories %}
-        <tr class="hover:bg-primary/10 transition-colors duration-200 stagger-table-row">
+        <tr class="hover:bg-primary/10 transition-colors duration-200">
           <td class="p-4 font-medium text-foreground">
             <a href="{% url 'categories:category-detail' category.pk %}" class="hover:underline hover:text-primary">{{ category.name }}</a>
           </td>

@@ -4,10 +4,10 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 from categories.models import Category # Import the Category model
 from django.urls import reverse
 from django.db.models import Avg
-from django.utils.text import slugify # --- NEW: Import slugify
+from django.utils.text import slugify 
 
 # ---
-# NEW: "VILLAIN ARC" TAG MODEL
+# TAG MODEL (Unchanged)
 # ---
 class Tag(models.Model):
     name = models.CharField(max_length=100, unique=True)
@@ -20,13 +20,12 @@ class Tag(models.Model):
         return self.name
 
     def save(self, *args, **kwargs):
-        # Auto-generate slug from name if it's blank
         if not self.slug:
             self.slug = slugify(self.name)
         super().save(*args, **kwargs)
 
 # ---
-# NOTE MODEL (Updated)
+# NOTE MODEL (Unchanged)
 # ---
 class Note(models.Model):
     title = models.CharField(max_length=255)
@@ -46,13 +45,11 @@ class Note(models.Model):
         blank=True, 
         related_name="notes"
     )
-    # --- NEW: TAGS FIELD ---
     tags = models.ManyToManyField(
         Tag, 
         blank=True, 
         related_name="notes"
     )
-    # --- END NEW FIELD ---
     
     # Status & Rating
     is_public = models.BooleanField(default=True, help_text="Allow anyone (even guests) to see this note.")
@@ -75,7 +72,7 @@ class Note(models.Model):
     def update_rating(self):
         """
         Recalculates the average rating and total ratings for a note.
-        This is called by the Rating model when a rating is saved or deleted.
+        This is now called explicitly by RateNoteView or the seeder.
         """
         ratings_data = self.ratings.aggregate(
             average=Avg('value'),
@@ -87,7 +84,7 @@ class Note(models.Model):
         self.save()
 
 # ---
-# RATING MODEL (Unchanged)
+# RATING MODEL (MODIFIED)
 # ---
 class Rating(models.Model):
     note = models.ForeignKey(Note, on_delete=models.CASCADE, related_name='ratings')
@@ -96,20 +93,12 @@ class Rating(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        # A user can only rate a specific note once
         unique_together = ('note', 'user')
         ordering = ['-created_at']
 
     def __str__(self):
         return f"{self.user.username} rated {self.note.title} with {self.value} stars"
 
-    def save(self, *args, **kwargs):
-        super().save(*args, **kwargs)
-        # After saving, trigger the note to update its average rating
-        self.note.update_rating()
-
-    def delete(self, *args, **kwargs):
-        note = self.note
-        super().delete(*args, **kwargs)
-        # After deleting, trigger the note to update its average rating
-        note.update_rating()
+    # --- REMOVED `save` and `delete` methods ---
+    # We will handle the note update from the view
+    # to prevent the bug.

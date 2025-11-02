@@ -1,6 +1,7 @@
 {% load static %}
 <!DOCTYPE html>
-<html lang="en" class="dark"> <head>
+<html lang="en" class="dark">
+  <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
@@ -11,6 +12,7 @@
     <script src="https://unpkg.com/@yaireo/tagify"></script>
     <script src="https://unpkg.com/@yaireo/tagify/dist/tagify.polyfills.min.js"></script>
     <link href="https://unpkg.com/@yaireo/tagify/dist/tagify.css" rel="stylesheet" type="text/css" />
+
     <script>
       tailwind.config = {
         darkMode: ["class"],
@@ -136,8 +138,8 @@
         --popover-foreground: hsl(222, 20%, 25%);
         
         --primary-light: hsl(145, 90%, 80%);
-        --primary: hsl(145, 70%, 45%); /* Main Minty Green */
-        --primary-dark: hsl(160, 80%, 35%); /* Dark Teal for gradient */
+        --primary: hsl(145, 70%, 45%);
+        --primary-dark: hsl(160, 80%, 35%);
         --primary-foreground: hsl(0, 0%, 100%);
 
         --secondary-light: hsl(220, 25%, 80%);
@@ -147,7 +149,7 @@
         
         --muted: hsl(220, 20%, 94%);
         --muted-foreground: hsl(220, 15%, 45%);
-        --accent: hsl(135, 90%, 50%); /* Sharp Neon Green */
+        --accent: hsl(135, 90%, 50%);
         --destructive: hsl(0, 84%, 60%);
         --destructive-foreground: hsl(0, 0%, 100%);
         --border: hsl(220, 20%, 90%);
@@ -181,7 +183,7 @@
         --popover-foreground: hsl(210, 20%, 90%);
         
         --primary-light: hsl(145, 70%, 55%);
-        --primary: hsl(145, 70%, 50%); /* Bright Mint Green */
+        --primary: hsl(145, 70%, 50%);
         --primary-dark: hsl(150, 70%, 60%);
         --primary-foreground: hsl(145, 100%, 10%);
         
@@ -192,7 +194,7 @@
 
         --muted: hsl(222, 30%, 20%);
         --muted-foreground: hsl(215, 16%, 55%);
-        --accent: hsl(135, 90%, 55%); /* Bright Neon Green */
+        --accent: hsl(135, 90%, 55%);
         --destructive: hsl(0, 84%, 70%);
         --destructive-foreground: hsl(0, 0%, 100%);
         --border: hsl(222, 30%, 25%);
@@ -207,7 +209,7 @@
         transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
       }
 
-      /* --- NEW: Aurora Background --- */
+      /* --- Aurora Background (Optimized) --- */
       .aurora-bg {
         position: fixed;
         top: 0; left: 0; right: 0; bottom: 0;
@@ -220,11 +222,11 @@
             radial-gradient(at 80% 80%, var(--primary-dark) 0px, transparent 50%);
         background-size: 200% 200%;
         filter: blur(100px);
-        opacity: 0.15;
+        opacity: 0.1; 
         animation: aurora 60s linear infinite;
       }
       .dark .aurora-bg {
-        opacity: 0.2;
+        opacity: 0.15; 
       }
       
       /* --- Custom Scrollbar --- */
@@ -233,14 +235,14 @@
       ::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 10px; transition: background-color 0.2s ease; }
       ::-webkit-scrollbar-thumb:hover { background: var(--primary-dark); }
       
-      /* --- Animated Gradient Active Sidebar Link --- */
+      /* --- Active Sidebar Link --- */
       .sidebar-active {
         color: var(--primary-foreground);
         font-weight: 600; 
         background: linear-gradient( 60deg, var(--primary), var(--primary-dark), var(--primary));
         background-size: 300% 300%;
         animation: gradient-animation 8s ease-in-out infinite;
-        box-shadow: 0 0 20px 0px hsla(var(--primary-light), 0.4); /* NEON GLOW */
+        box-shadow: 0 0 20px 0px hsla(var(--primary-light), 0.4);
         transform: scale(1.03);
       }
       .dark .sidebar-active { color: var(--primary-foreground); }
@@ -272,7 +274,7 @@
 
       .btn-primary:hover {
         transform: translateY(-4px) scale(1.03);
-        box-shadow: 0 0 25px 0px hsla(var(--primary-light), 0.5); /* NEON GLOW */
+        box-shadow: 0 0 25px 0px hsla(var(--primary-light), 0.5);
         filter: brightness(1.1);
       }
       
@@ -360,7 +362,7 @@
         border: 1px solid var(--border);
         color: var(--foreground);
         border-radius: var(--radius);
-        padding: 0.4rem 0.75rem; /* Less bulky */
+        padding: 0.4rem 0.75rem;
         font-size: 0.875rem; 
         transition: all 0.3s ease-in-out;
         box-shadow: var(--shadow-sm);
@@ -375,7 +377,7 @@
          box-shadow: 0 0 0 3px hsl(145, 70%, 45%, 0.3);
       }
       
-      /* Bento Card Mouse-Follow Effect */
+      /* Bento Card (Optimized) */
       .bento-card {
         background-color: var(--card);
         border: 1px solid var(--border);
@@ -385,36 +387,16 @@
         position: relative;
         overflow: hidden;
       }
-      .bento-card::before {
-        content: "";
-        position: absolute;
-        top: 0; left: 0;
-        width: 100%; height: 100%;
-        background: radial-gradient(
-          800px circle at var(--mouse-x, 0) var(--mouse-y, 0),
-          hsla(145, 70%, 50%, 0.15),
-          transparent 40%
-        );
-        opacity: 0;
-        transition: opacity 0.5s;
-        z-index: 0;
-      }
-      .bento-card:hover::before {
-        opacity: 1;
-      }
-      .bento-card > * {
-        position: relative;
-        z-index: 1;
-      }
       .bento-card:hover {
         transform: translateY(-6px);
         border-color: var(--primary);
+        box-shadow: 0 0 25px 0px hsla(var(--primary-light), 0.3);
       }
       .bento-card i {
         color: var(--primary);
       }
       
-      /* --- NEW: "VILLAIN ARC" TAGIFY STYLES --- */
+      /* --- Tagify Styles --- */
       :root {
         --tagify-border-color: var(--border);
         --tagify-focus-border-color: var(--primary);
@@ -435,7 +417,6 @@
         border-radius: var(--radius);
         background-color: var(--background);
         border: 1px solid var(--border);
-        /* Match our form input padding */
         padding: 0.15rem 0.75rem; 
         font-size: 0.875rem;
       }
@@ -463,13 +444,12 @@
         --tag-text-color: var(--primary-foreground);
       }
       .tagify__input {
-        /* Match our placeholder color */
         color: var(--muted-foreground); 
       }
       .dark .tagify__input {
         color: var(--muted-foreground);
       }
-      /* --- END NEW TAGIFY STYLES --- */
+      /* --- END TAGIFY STYLES --- */
 
     </style>
   </head>
@@ -477,7 +457,7 @@
     
     <div class="aurora-bg"></div>
     
-    <div class="relative min-h-screen" x-data="{ sidebarOpen: false }">
+    <div class="relative flex h-screen overflow-hidden" x-data="{ sidebarOpen: false }">
       
       <aside 
         class="w-60 bg-card/50 backdrop-blur-lg border-r border-border/50 flex flex-col shadow-lg fixed z-30 h-screen transition-transform duration-300 ease-in-out"
@@ -608,7 +588,7 @@
       ></div>
 
       <main 
-        class="flex-1 flex flex-col overflow-auto transition-all duration-300 ease-in-out"
+        class="relative flex flex-col flex-1 overflow-y-auto transition-all duration-300 ease-in-out"
         :class="sidebarOpen ? 'lg:pl-60' : 'pl-0'"
       >
         <header class="bg-card/30 backdrop-blur-lg border-b border-border/50 px-6 py-3 sticky top-0 z-10">
@@ -673,9 +653,8 @@
           </div>
         </header>
 
-        <div class="p-6 flex-1 overflow-y-auto" id="main-content">
-          
-          {% if messages %}
+        <div class="p-6" id="main-content"> 
+        {% if messages %}
             <ul class="message-list">
                 {% for message in messages %}
                     <li class="message-item {{ message.tags }}" x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 5000)" x-transition>
@@ -706,12 +685,12 @@
         </div>
       </main>
     </div>
-    
+
     <script>
       lucide.createIcons()
       
-      // Staggered list animation logic
       document.addEventListener("DOMContentLoaded", () => {
+        // Staggered list animation logic
         const animatedItems = document.querySelectorAll(".stagger-animation");
         animatedItems.forEach((item, index) => {
           item.style.setProperty("--delay", `${index * 100}ms`);
@@ -723,26 +702,6 @@
           item.style.setProperty("--delay", `${index * 75}ms`);
           item.style.animationDelay = item.style.getPropertyValue("--delay");
         });
-
-        // Bento Card Mouse-Follow Effect
-        const mainContent = document.getElementById('main-content');
-        if (mainContent) {
-            mainContent.addEventListener('mousemove', (e) => {
-                const cards = document.querySelectorAll('.bento-card');
-                cards.forEach(card => {
-                    const rect = card.getBoundingClientRect();
-                    const x = e.clientX;
-                    const y = e.clientY;
-                    const cardX = rect.left;
-                    const cardY = rect.top;
-                    const mouseX = x - cardX;
-                    const mouseY = y - cardY;
-                    
-                    card.style.setProperty('--mouse-x', `${mouseX}px`);
-                    card.style.setProperty('--mouse-y', `${mouseY}px`);
-                });
-            });
-        }
         
         // --- Theme Toggle Logic ---
         const themeToggleBtn = document.getElementById('theme-toggle');

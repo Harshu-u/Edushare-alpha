@@ -46,9 +46,10 @@
              <p>Your browser does not support PDFs. <a href="{{ note.file.url }}">Download the PDF</a>.</p>
           </iframe>
         {% else %}
-          <div classs="text-center p-12">
+          <div class="text-center p-12">
             <i data-lucide="file-question" class="w-16 h-16 text-muted-foreground mx-auto"></i>
             <p class="text-muted-foreground mt-2">Preview is not available for this file type (yet!).</p>
+            <p class="text-xs text-muted-foreground">This note is just a placeholder.</p>
           </div>
         {% endif %}
         
@@ -79,6 +80,18 @@
         </div>
       </div>
       
+      {% if note.tags.all %}
+      <div class="bento-card p-6">
+        <h3 class="text-lg font-semibold text-foreground mb-4">Tags</h3>
+        <div class="flex flex-wrap gap-2">
+          {% for tag in note.tags.all %}
+            <span class="px-3 py-1 rounded-full bg-primary/10 text-primary text-sm font-medium">
+              {{ tag.name }}
+            </span>
+          {% endfor %}
+        </div>
+      </div>
+      {% endif %}
       {% if user.is_authenticated %}
       <div classs="bento-card p-6">
         <h3 class="text-lg font-semibold text-foreground mb-3">
@@ -115,4 +128,149 @@
       
       {% if user == note.uploader or user.is_teacher or user.is_staff %}
       <div class="bento-card p-6">
-        <h3 class="text-lg font-semibold text
+        <h3 class="text-lg font-semibold text-foreground mb-4">Note Actions</h3>
+        <div class="flex flex-col gap-3">
+          <a href="{% url 'notes:note-edit' note.pk %}" 
+             class="btn-secondary flex items-center justify-center gap-2 px-4 py-2 rounded-lg text-sm font-medium">
+            <i data-lucide="edit" class="w-4 h-4"></i> Edit Note
+          </a>
+          <a href="{% url 'notes:note-delete' note.pk %}"
+             class="btn-secondary flex items-center justify-center gap-2 px-4 py-2 rounded-lg text-sm font-medium text-destructive hover:bg-destructive hover:text-destructive-foreground hover:border-destructive">
+            <i data-lucide="trash-2" class="w-4 h-4"></i> Delete Note
+          </a>
+        </div>
+      </div>
+      {% endif %}
+      
+    </div>
+  </div>
+
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    
+    // --- Star Rating Widget ---
+    const widget = document.getElementById('star-rating-widget');
+    if (widget) {
+      const buttons = widget.querySelectorAll('.star-btn');
+      const ratingInput = document.getElementById('rating-value');
+      
+      let currentRating = parseInt(ratingInput.value) || 0;
+      
+      const updateStars = (rating) => {
+        buttons.forEach(btn => {
+          const btnValue = parseInt(btn.dataset.value);
+          if (btnValue <= rating) {
+            // --- Neon Styling ---
+            btn.classList.add('bg-primary/20', 'border-primary', 'text-primary');
+            btn.classList.remove('bg-muted/30', 'border-border/50', 'text-muted-foreground');
+          } else {
+            // --- Neon Styling ---
+            btn.classList.remove('bg-primary/20', 'border-primary', 'text-primary');
+            btn.classList.add('bg-muted/30', 'border-border/50', 'text-muted-foreground');
+          }
+        });
+      };
+      
+      buttons.forEach(btn => {
+        btn.addEventListener('mouseenter', () => updateStars(parseInt(btn.dataset.value)));
+        btn.addEventListener('mouseleave', () => updateStars(currentRating));
+        btn.addEventListener('click', (e) => {
+          e.preventDefault();
+          currentRating = parseInt(btn.dataset.value);
+          ratingInput.value = currentRating;
+          updateStars(currentRating);
+        });
+      });
+      
+      // Set initial state
+      updateStars(currentRating);
+    }
+    
+    // --- Rating Form Submission (AJAX) ---
+    const ratingForm = document.getElementById('rating-form');
+    if (ratingForm) {
+      ratingForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        const feedbackEl = document.getElementById('rating-feedback');
+        const avgRatingEl = document.getElementById('avg-rating');
+        const totalRatingsEl = document.getElementById('total-ratings');
+        
+        feedbackEl.textContent = 'Submitting...';
+        
+        try {
+          const formData = new FormData(ratingForm);
+          const response = await fetch(ratingForm.action, {
+            method: 'POST',
+            body: formData,
+            headers: {
+              'X-Requested-With': 'XMLHttpRequest',
+              'X-CSRFToken': '{{ csrf_token }}' // Ensure CSRF token is sent
+            }
+          });
+          
+          if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.error || `HTTP error! status: ${response.status}`);
+          }
+          
+          const data = await response.json();
+          
+          if (data.success) {
+            feedbackEl.textContent = data.message;
+            feedbackEl.classList.add('text-primary');
+            feedbackEl.classList.remove('text-destructive');
+            
+            // Update the dashboard stats
+            avgRatingEl.textContent = data.average_rating;
+            totalRatingsEl.textContent = `based on ${data.total_ratings} rating${data.total_ratings === 1 ? '' : 's'}`;
+            
+            // Update the average stars display
+            updateAverageStars(data.average_rating);
+            
+          } else {
+            throw new Error(data.error || 'An error occurred.');
+          }
+        } catch (error) {
+          console.error('Rating submission error:', error);
+          feedbackEl.textContent = error.message;
+          feedbackEl.classList.add('text-destructive');
+          feedbackEl.classList.remove('text-primary');
+        }
+      });
+    }
+
+    // --- Average Star Display ---
+    const avgStarsEl = document.getElementById('avg-stars');
+    if (avgStarsEl) {
+      const updateAverageStars = (rating) => {
+        let starsHtml = '';
+        const fullStars = Math.floor(rating);
+        const halfStar = (rating % 1 >= 0.5) ? 1 : 0;
+        const emptyStars = 5 - fullStars - halfStar;
+        
+        // Use a consistent size (w-4 h-4)
+        for(let i=0; i < fullStars; i++) {
+          starsHtml += `<i data-lucide="star" class="w-4 h-4 fill-current"></i>`;
+        }
+        if (halfStar) {
+          starsHtml += `<i data-lucide="star-half" class="w-4 h-4 fill-current"></i>`;
+        }
+        for(let i=0; i < emptyStars; i++) {
+          starsHtml += `<i data-lucide="star" class="w-4 h-4"></i>`;
+        }
+        avgStarsEl.innerHTML = starsHtml;
+        lucide.createIcons(); // Re-render icons
+      };
+      
+      // Initial render
+      updateAverageStars(parseFloat(avgStarsEl.dataset.rating));
+    }
+
+  });
+</script>
+{% endblock %}
