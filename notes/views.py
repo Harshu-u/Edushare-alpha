@@ -6,7 +6,8 @@ from django.contrib import messages
 from django.views import View
 from django.db.models import Q, Avg, Prefetch
 from django.http import JsonResponse, HttpResponseForbidden
-
+# This is the import you added, which is correct!
+from django.contrib.postgres.search import SearchVector, SearchQuery, SearchRank
 from .models import Note, Rating, Tag 
 from categories.models import Category
 from .forms import NoteForm, RatingForm
@@ -21,6 +22,9 @@ class OwnerOrTeacherRequiredMixin(LoginRequiredMixin, UserPassesTestMixin):
         messages.error(self.request, "You do not have permission to modify this note.")
         return redirect('notes:note-list')
 
+#
+# --- THIS IS THE UPDATED CLASS ---
+#
 class NoteListView(ListView):
     model = Note
     template_name = 'notes/note_list.html'
@@ -28,6 +32,7 @@ class NoteListView(ListView):
     paginate_by = 12
 
     def get_queryset(self):
+        # Start with the base, optimized queryset
         queryset = Note.objects.filter(is_public=True).select_related('uploader', 'category').prefetch_related('tags')
         
         search_query = self.request.GET.get('q', '')
@@ -35,30 +40,54 @@ class NoteListView(ListView):
         sort_query = self.request.GET.get('sort', '-created_at')
 
         if search_query:
-            queryset = queryset.filter(
-                Q(title__icontains=search_query) |
-                Q(description__icontains=search_query) |
-                Q(uploader__first_name__icontains=search_query) |
-                Q(uploader__last_name__icontains=search_query) |
-                Q(category__name__icontains=search_query) |
-                Q(tags__name__icontains=search_query) 
-            ).distinct() 
+            # --- NEW: Full-Text Search ---
+            # 1. Define what fields to search against, and with what priority
+            vector = SearchVector('title', weight='A') + \
+                     SearchVector('tags__name', weight='A') + \
+                     SearchVector('description', weight='B') + \
+                     SearchVector('category__name', weight='B') + \
+                     SearchVector('uploader__first_name', weight='C') + \
+                     SearchVector('uploader__last_name', weight='C')
+            
+            # 2. Create the query
+            query = SearchQuery(search_query)
+            
+            # 3. Filter the queryset by rank, and sort by the most relevant first
+            queryset = queryset.annotate(
+                rank=SearchRank(vector, query)
+            ).filter(rank__gte=0.1).order_by('-rank')
+            # --- END NEW SEARCH ---
         
-        if category_query:
+        elif category_query:
+            # Only filter by category if not searching
             queryset = queryset.filter(category__pk=category_query)
             
-        if sort_query in ['-average_rating', '-created_at', 'title']:
+        elif sort_query in ['-average_rating', '-created_at', 'title']:
+             # Only apply sort_query if we are NOT searching
+             # (since search results should be sorted by rank)
              queryset = queryset.order_by(sort_query)
+             
+        if category_query and search_query:
+            # OPTIONAL: If you want to filter by category *on top of* search results
+            queryset = queryset.filter(category__pk=category_query)
 
-        return queryset
+        # .distinct() is still good practice when joining on ManyToMany fields (like tags)
+        return queryset.distinct()
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['categories'] = Category.objects.all()
         context['search_query'] = self.request.GET.get('q', '')
-        context['category_query'] = self.request.GET.get('category', '')
+        # Convert category_query to int for proper comparison in template if it exists
+        try:
+            context['category_query'] = int(self.request.GET.get('category', ''))
+        except (ValueError, TypeError):
+            context['category_query'] = ''
         context['sort_query'] = self.request.GET.get('sort', '-created_at')
         return context
+#
+# --- END OF UPDATED CLASS ---
+#
 
 
 class NoteDetailView(DetailView):

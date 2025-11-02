@@ -87,11 +87,22 @@
       <span class="text-xs text-muted-foreground">
         {{ note.created_at|naturaltime }}
       </span>
-      <a href="{{ note.file.url }}" target="_blank" class="btn-primary flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-medium">
-        <i data-lucide="download" class="w-4 h-4"></i>
-        Download
-      </a>
-    </div>
+      
+      {% if user.is_authenticated %}
+        <a href="{{ note.file.url }}" target="_blank" class="btn-primary flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-medium">
+          <i data-lucide="download" class="w-4 h-4"></i>
+          Download
+        </a>
+      {% else %}
+        <button @click.prevent="showLoginModal = true"
+           class="flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-medium 
+                  bg-muted/30 text-muted-foreground border border-border/50 cursor-pointer 
+                  transition-all hover:bg-muted/60">
+          <i data-lucide="lock" class="w-4 h-4"></i>
+          Login to Download
+        </button>
+      {% endif %}
+      </div>
   </div>
   {% empty %}
   <div class="bento-card md:col-span-2 lg:col-span-3 xl:col-span-4 p-8 text-center">

@@ -7,121 +7,10 @@
 
     <title>{% block title %}Dashboard{% endblock %} - EduShare</title>
 
-    <script src="https://cdn.tailwindcss.com"></script>
-    
+    <link href="{% static 'css/output.css' %}" rel="stylesheet" />
     <script src="https://unpkg.com/@yaireo/tagify"></script>
     <script src="https://unpkg.com/@yaireo/tagify/dist/tagify.polyfills.min.js"></script>
     <link href="https://unpkg.com/@yaireo/tagify/dist/tagify.css" rel="stylesheet" type="text/css" />
-
-    <script>
-      tailwind.config = {
-        darkMode: ["class"],
-        theme: {
-          extend: {
-            borderRadius: {
-              lg: "var(--radius)",
-              md: "calc(var(--radius) - 2px)",
-              sm: "calc(var(--radius) - 4px)",
-            },
-            colors: {
-              background: "var(--background)",
-              foreground: "var(--foreground)",
-              card: {
-                DEFAULT: "var(--card)",
-                foreground: "var(--card-foreground)",
-              },
-              popover: {
-                DEFAULT: "var(--popover)",
-                foreground: "var(--popover-foreground)",
-              },
-              primary: {
-                light: "var(--primary-light)",
-                DEFAULT: "var(--primary)",
-                dark: "var(--primary-dark)",
-                foreground: "var(--primary-foreground)",
-              },
-              secondary: {
-                light: "var(--secondary-light)",
-                DEFAULT: "var(--secondary)",
-                dark: "var(--secondary-dark)",
-                foreground: "var(--secondary-foreground)",
-              },
-              muted: {
-                DEFAULT: "var(--muted)",
-                foreground: "var(--muted-foreground)",
-              },
-              accent: {
-                DEFAULT: "var(--accent)",
-                foreground: "var(--accent-foreground)",
-              },
-              destructive: {
-                DEFAULT: "var(--destructive)",
-                foreground: "var(--destructive-foreground)",
-              },
-              border: "var(--border)",
-              input: "var(--input)",
-              ring: "var(--ring)",
-              chart: {
-                1: "var(--chart-1)",
-                2: "var(--chart-2)",
-                3: "var(--chart-3)",
-                "4.": "var(--chart-4)",
-                5: "var(--chart-5)",
-              },
-            },
-            fontFamily: {
-              sans: ["var(--font-sans)"],
-              serif: ["var(--font-serif)"],
-              mono: ["var(--font-mono)"],
-            },
-            keyframes: {
-              "accordion-down": {
-                from: { height: "0" },
-                to: { height: "var(--radix-accordion-content-height)" },
-              },
-              "accordion-up": {
-                from: { height: "var(--radix-accordion-content-height)" },
-                to: { height: "0" },
-              },
-              "gradient-animation": {
-                "0%": { backgroundPosition: "0% 50%" },
-                "50%": { backgroundPosition: "100% 50%" },
-                "100%": { backgroundPosition: "0% 50%" },
-              },
-              "aurora": {
-                "from": { backgroundPosition: "50% 50%, 50% 50%" },
-                "to": { backgroundPosition: "350% 50%, 350% 50%" },
-              },
-              "slide-in-left": {
-                "from": { opacity: 0, transform: "translateX(-20px)" },
-                "to": { opacity: 1, transform: "translateX(0)" },
-              },
-              "fadeIn": {
-                "from": { opacity: 0, transform: "translateY(10px)" },
-                "to": { opacity: 1, transform: "translateY(0)" },
-              },
-              "pulse-soft": {
-                "0%, 100%": { boxShadow: "0 0 0 0 var(--primary-light)" },
-                "50%": { boxShadow: "0 0 0 10px rgba(0,0,0,0)" },
-              },
-              "shimmer": {
-                "100%": { transform: "translateX(100%)" },
-              },
-            },
-            animation: {
-              "accordion-down": "accordion-down 0.2s ease-out",
-              "accordion-up": "accordion-up 0.2s ease-out",
-              "gradient-pulse": "gradient-animation 8s ease-in-out infinite",
-              "aurora": "aurora 60s linear infinite", 
-              "fade-in-up": "fadeIn 0.5s ease-out forwards",
-              "slide-in-left": "slide-in-left 0.5s ease-out forwards",
-              "pulse-soft": "pulse-soft 2s infinite",
-              "shimmer": "shimmer 1.5s infinite",
-            },
-          },
-        },
-      };
-    </script>
 
     <script src="https://unpkg.com/lucide@latest"></script>
     
@@ -457,7 +346,7 @@
     
     <div class="aurora-bg"></div>
     
-    <div class="relative flex h-screen overflow-hidden" x-data="{ sidebarOpen: false }">
+    <div class="relative flex h-screen overflow-hidden" x-data="{ sidebarOpen: false, showLoginModal: false }">
       
       <aside 
         class="w-60 bg-card/50 backdrop-blur-lg border-r border-border/50 flex flex-col shadow-lg fixed z-30 h-screen transition-transform duration-300 ease-in-out"
@@ -475,7 +364,8 @@
               <p class="text-xs text-muted-foreground capitalize"> 
                 {% if user.is_authenticated %} 
                   {{ user.role|default:"User" }}
-                {% endif %}
+                {% else %}
+                  Guest {% endif %}
               </p>
             </div>
           </div>
@@ -561,17 +451,28 @@
 
           </ul>
         </nav>
+        
         <div class="p-3 border-t border-border/50"> 
-          <form method="post" action="{% url 'logout' %}">
-            {% csrf_token %}
-            <button 
-              type="submit" 
-              class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-lg text-foreground/80 hover:text-destructive hover:bg-destructive/10 transition-colors duration-300 text-sm font-medium"
-            > 
-              <i data-lucide="log-out" class="w-5 h-5"></i>
-              <span>Logout</span>
-            </button>
-          </form>
+          {% if user.is_authenticated %}
+            <form method="post" action="{% url 'logout' %}">
+              {% csrf_token %}
+              <button 
+                type="submit" 
+                class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-lg text-foreground/80 hover:text-destructive hover:bg-destructive/10 transition-colors duration-300 text-sm font-medium"
+              > 
+                <i data-lucide="log-out" class="w-5 h-5"></i>
+                <span>Logout</span>
+              </button>
+            </form>
+          {% else %}
+             <a 
+                href="{% url 'login' %}?next={{ request.path }}" 
+                class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-lg text-foreground/80 hover:text-primary hover:bg-primary/10 transition-colors duration-300 text-sm font-medium"
+              > 
+                <i data-lucide="log-in" class="w-5 h-5"></i>
+                <span>Login / Register</span>
+              </a>
+          {% endif %}
         </div>
       </aside>
 
@@ -639,12 +540,13 @@
                     {{ user.first_name|first|upper }}{{ user.last_name|first|upper }} 
                   {% elif user.is_authenticated %} 
                     {{ user.username|first|upper }}
-                  {% else %} G {% endif %}
-                </div>
+                  {% else %} G {% endif %} </div>
                 <div class="text-sm hidden md:block">
                    <p class="text-sm font-medium text-foreground capitalize">
                      {% if user.is_authenticated %} 
                        {{ user.get_full_name }}
+                     {% else %}
+                       Guest User
                      {% endif %}
                    </p>
                 </div>
@@ -737,5 +639,57 @@
     </script>
     
     {% block extra_js %}{% endblock %}
-  </body>
+
+    <div 
+      x-show="showLoginModal" 
+      @keydown.escape.window="showLoginModal = false"
+      x-transition:enter="transition ease-out duration-300"
+      x-transition:enter-start="opacity-0"
+      x-transition:enter-end="opacity-100"
+      x-transition:leave="transition ease-in duration-200"
+      x-transition:leave-start="opacity-100"
+      x-transition:leave-end="opacity-0"
+      class="fixed inset-0 z-50 flex items-center justify-center p-4"
+      style="display: none;"
+    >
+      <div @click="showLoginModal = false" class="fixed inset-0 bg-background/80 backdrop-blur-sm"></div>
+      
+      <div 
+        @click.stop 
+        x-show="showLoginModal"
+        x-transition:enter="transition ease-out duration-300"
+        x-transition:enter-start="opacity-0 transform scale-90"
+        x-transition:enter-end="opacity-100 transform scale-100"
+        x-transition:leave="transition ease-in duration-200"
+        x-transition:leave-start="opacity-100 transform scale-100"
+        x-transition:leave-end="opacity-0 transform scale-90"
+        class="relative z-10 w-full max-w-md p-6 overflow-hidden rounded-2xl bento-card"
+      >
+        <div class="text-center">
+          <div class="w-12 h-12 mx-auto mb-4 rounded-lg flex-shrink-0 flex items-center justify-center bg-primary/10 border border-primary/50">
+              <i data-lucide="lock" class="w-6 h-6 text-primary"></i>
+          </div>
+          <h3 class="text-xl font-semibold text-foreground">Feature Locked</h3>
+          <p class="mt-2 text-muted-foreground">
+            You must be logged in to use this feature.
+          </p>
+          
+          <div class="mt-6 space-y-3">
+            <a href="{% url 'login' %}?next={{ request.path }}" 
+               class="btn-primary flex items-center justify-center w-full px-4 py-2.5 rounded-lg text-sm font-semibold">
+               Login
+            </a>
+            <a href="{% url 'register' %}?next={{ request.path }}" 
+               class="btn-secondary flex items-center justify-center w-full px-4 py-2.5 rounded-lg text-sm font-semibold">
+               Create Account
+            </a>
+          </div>
+          
+          <button @click="showLoginModal = false" class="mt-4 text-sm text-muted-foreground hover:text-primary">
+            Cancel
+          </button>
+        </div>
+      </div>
+    </div>
+    </body>
 </html>

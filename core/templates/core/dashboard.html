@@ -1,6 +1,5 @@
 {% extends "core/base.html" %}
-
-{% block title %}Dashboard{% endblock %}
+{% load cache %} {% block title %}Dashboard{% endblock %}
 
 {% block page_title %}Command Center{% endblock %}
 
@@ -8,13 +7,15 @@
 
 <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
 
-  <div class="bento-card md:col-span-1 lg:col-span-1 lg:row-span-2 p-6 flex flex-col justify-between " style="--delay: 100ms;">
+  <div class="bento-card md:col-span-1 lg:col-span-1 p-6 flex flex-col justify-between " style="--delay: 100ms;">
     <div>
       <h3 class="text-2xl font-bold">
-        {% if user.first_name %}
+        {% if user.is_authenticated and user.first_name %}
           Welcome, {{ user.first_name }}.
-        {% else %}
+        {% elif user.is_authenticated %}
           Welcome, {{ user.username }}.
+        {% else %}
+          Welcome, Guest.
         {% endif %}
       </h3>
       <p class="text-muted-foreground mt-1">Here's your command center overview.</p>
@@ -22,112 +23,141 @@
     
     <div class="mt-8">
       <p class="text-sm text-muted-foreground">Your Reputation</p>
-      <p class="text-6xl font-bold text-primary animate-pulse">{{ user.reputation|default:"0" }}</p>
-      <p class="text-sm text-muted-foreground mt-2">Keep contributing to raise your score.</p>
+      <p class="text-6xl font-bold text-primary animate-pulse">
+        {% if user.is_authenticated %}
+          {{ user.reputation|default:"0" }}
+        {% else %}
+          --
+        {% endif %}
+      </p>
+      <p class="text-sm text-muted-foreground mt-2">
+        {% if user.is_authenticated %}
+          Keep contributing to raise your score.
+        {% else %}
+          <button @click.prevent="showLoginModal = true" class="text-primary hover:underline">Log in</button> to start earning.
+        {% endif %}
+      </p>
       
-      <a href="{% url 'notes:note-create' %}" class="btn-primary w-full mt-6 py-3 flex items-center justify-center gap-2">
-        <i data-lucide="upload" class="w-4 h-4"></i>
-        Upload a Note
-      </a>
-    </div>
-  </div>
-  
-  <div class="bento-card p-6 " style="--delay: 200ms;">
-    <div class="flex items-center justify-between">
-      <p class="text-muted-foreground text-sm font-medium">Total Notes</p>
-      <i data-lucide="notebook-tabs" class="w-6 h-6 text-primary"></i>
-    </div>
-    <p class="text-5xl font-bold text-foreground mt-4">
-      {{ note_count|default:"0" }}
-    </p>
-  </div>
-  
-  <div class="bento-card p-6 " style="--delay: 300ms;">
-    <div class="flex items-center justify-between">
-      <p class="text-muted-foreground text-sm font-medium">Total Categories</p>
-      <i data-lucide="folder-kanban" class="w-6 h-6 text-primary"></i>
-    </div>
-    <p class="text-5xl font-bold text-foreground mt-4">
-      {{ category_count|default:"0" }}
-    </p>
-  </div>
-
-  <div class="bento-card p-6 " style="--delay: 400ms;">
-    <div class="flex items-center justify-between">
-      <p class="text-muted-foreground text-sm font-medium">Active Users</p>
-      <i data-lucide="users" class="w-6 h-6 text-primary"></i>
-    </div>
-    <p class="text-5xl font-bold text-foreground mt-4">
-      {{ user_count|default:"0" }}
-    </p>
-  </div>
-  
-  <div class="bento-card md:col-span-2 lg:col-span-2 lg:row-span-2 p-6 " style="--delay: 500ms;">
-    <h3 class="text-lg font-semibold text-foreground">Notes per Category</h3>
-    <div class="h-64 lg:h-full lg:min-h-[280px] mt-4">
-      <canvas id="categoryChart" data-labels='{{ category_chart_labels|escapejs }}' data-values='{{ category_chart_data|escapejs }}'></canvas>
-    </div>
-  </div>
-  
-  <div class="bento-card md:col-span-1 lg:col-span-1 lg:row-span-2 p-6 flex flex-col" style="--delay: 600ms;">
-    <h3 class="text-lg font-semibold text-foreground mb-4">Top Rated Notes</h3>
-    <div class="space-y-3 max-h-96 overflow-y-auto pr-2 flex-1">
-      {% for note in top_notes %}
-        <a href="{% url 'notes:note-detail' note.pk %}" class="block p-3 hover:bg-muted/50 rounded-lg transition-all duration-200">
-          <div class="flex justify-between items-center">
-            <p class="font-medium text-foreground truncate w-4/5">{{ note.title }}</p>
-            <span class="text-sm font-bold text-yellow-400 flex-shrink-0">{{ note.average_rating|floatformat:1 }} ★</span>
-          </div>
-          <p class="text-xs text-muted-foreground">
-            By {{ note.uploader.first_name|default:note.uploader.username }} | {{ note.category.name }}
-          </p>
+      {% if user.is_authenticated %}
+        <a href="{% url 'notes:note-create' %}" class="btn-primary w-full mt-6 py-3 flex items-center justify-center gap-2">
+          <i data-lucide="upload" class="w-4 h-4"></i>
+          Upload a Note
         </a>
-      {% empty %}
-        <p class="text-sm text-muted-foreground text-center pt-4">No rated notes yet.</p>
-      {% endfor %}
-    </div>
-  </div>
-  
-  <div class="bento-card md:col-span-3 lg:col-span-2 p-6 flex flex-col" style="--delay: 700ms;">
-    <h3 class="text-lg font-semibold text-foreground mb-4">Recently Uploaded</h3>
-     <div class="space-y-3 max-h-96 overflow-y-auto pr-2 flex-1">
-      {% for note in recent_notes %}
-        <a href="{% url 'notes:note-detail' note.pk %}" class="block p-3 hover:bg-muted/50 rounded-lg transition-all duration-200">
-          <div class="flex justify-between items-center">
-            <p class="font-medium text-foreground truncate w-4/5">{{ note.title }}</p>
-            <span class="text-xs text-muted-foreground flex-shrink-0">{{ note.created_at|timesince }} ago</span>
-          </div>
-          <p class="text-xs text-muted-foreground">
-            By {{ note.uploader.first_name|default:note.uploader.username }} | {{ note.category.name }}
-          </p>
-        </a>
-      {% empty %}
-        <p class="text-sm text-muted-foreground text-center pt-4">No notes uploaded yet.</p>
-      {% endfor %}
-    </div>
-  </div>
-
-  <div class="bento-card md:col-span-3 lg:col-span-2 p-6 flex flex-col" style="--delay: 800ms;">
-    <div class="flex justify-between items-center mb-4">
-      <h3 class="text-lg font-semibold text-foreground">Community Leaderboard</h3>
-      <a href="#" class="text-sm font-medium text-primary hover:text-primary-light transition-all">View All</a>
-    </div>
-     <div class="space-y-3 max-h-96 overflow-y-auto pr-2 flex-1">
-      {% if top_users %}
-        {% for user in top_users %}
-          <div class="flex items-center justify-between p-3 hover:bg-muted/50 rounded-lg transition-all duration-200">
-            <div class="flex items-center gap-3">
-              <span class="text-lg font-bold text-muted-foreground">#{{ forloop.counter }}</span>
-              <p class="font-medium text-foreground">{{ user.get_full_name }}</p>
-            </div>
-            <span class="text-lg font-bold text-primary">{{ user.reputation }} REP</span>
-          </div>
-        {% endfor %}
       {% else %}
-        <p class="text-sm text-muted-foreground text-center pt-4">Leaderboard is being calculated...</p>
+        <button @click.prevent="showLoginModal = true" class="btn-primary w-full mt-6 py-3 flex items-center justify-center gap-2">
+          <i data-lucide="upload" class="w-4 h-4"></i>
+          Upload a Note
+        </button>
       {% endif %}
     </div>
   </div>
+  
+  {% cache 300 dashboard_stats %}
+    <div class="bento-card p-6 " style="--delay: 200ms;">
+      <div class="flex items-center justify-between">
+        <p class="text-muted-foreground text-sm font-medium">Total Notes</p>
+        <i data-lucide="notebook-tabs" class="w-6 h-6 text-primary"></i>
+      </div>
+      <p class="text-5xl font-bold text-foreground mt-4">
+        {{ note_count|default:"0" }}
+      </p>
+    </div>
+    
+    <div class="bento-card p-6 " style="--delay: 300ms;">
+      <div class="flex items-center justify-between">
+        <p class="text-muted-foreground text-sm font-medium">Total Categories</p>
+        <i data-lucide="folder-kanban" class="w-6 h-6 text-primary"></i>
+      </div>
+      <p class="text-5xl font-bold text-foreground mt-4">
+        {{ category_count|default:"0" }}
+      </p>
+    </div>
+
+    <div class="bento-card p-6 " style="--delay: 400ms;">
+      <div class="flex items-center justify-between">
+        <p class="text-muted-foreground text-sm font-medium">Active Users</p>
+        <i data-lucide="users" class="w-6 h-6 text-primary"></i>
+      </div>
+      <p class="text-5xl font-bold text-foreground mt-4">
+        {{ user_count|default:"0" }}
+      </p>
+    </div>
+  {% endcache %}
+  
+  {% cache 300 category_chart %}
+    <div class="bento-card md:col-span-2 lg:col-span-2 p-6 " style="--delay: 500ms;">
+      <h3 class="text-lg font-semibold text-foreground">Notes per Category</h3>
+      <div class="h-64 mt-4">
+        <canvas id="categoryChart" data-labels='{{ category_chart_labels|escapejs }}' data-values='{{ category_chart_data|escapejs }}'></canvas>
+      </div>
+    </div>
+  {% endcache %}
+  
+  {% cache 300 top_rated_notes %}
+    <div class="bento-card md:col-span-1 lg:col-span-1 p-6 flex flex-col" style="--delay: 600ms;">
+      <h3 class="text-lg font-semibold text-foreground mb-4">Top Rated Notes</h3>
+      <div class="space-y-3 max-h-96 overflow-y-auto pr-2 flex-1">
+        {% for note in top_notes %}
+          <a href="{% url 'notes:note-detail' note.pk %}" class="block p-3 hover:bg-muted/50 rounded-lg transition-all duration-200">
+            <div class="flex justify-between items-center">
+              <p class="font-medium text-foreground truncate w-4/5">{{ note.title }}</p>
+              <span class="text-sm font-bold text-yellow-400 flex-shrink-0">{{ note.average_rating|floatformat:1 }} ★</span>
+            </div>
+            <p class="text-xs text-muted-foreground">
+              By {{ note.uploader.first_name|default:note.uploader.username }} | {{ note.category.name }}
+            </p>
+          </a>
+        {% empty %}
+          <p class="text-sm text-muted-foreground text-center pt-4">No rated notes yet.</p>
+        {% endfor %}
+      </div>
+    </div>
+  {% endcache %}
+  
+  {% cache 300 recent_notes %}
+    <div class="bento-card md:col-span-3 lg:col-span-2 p-6 flex flex-col" style="--delay: 700ms;">
+      <h3 class="text-lg font-semibold text-foreground mb-4">Recently Uploaded</h3>
+       <div class="space-y-3 max-h-96 overflow-y-auto pr-2 flex-1">
+        {% for note in recent_notes %}
+          <a href="{% url 'notes:note-detail' note.pk %}" class="block p-3 hover:bg-muted/50 rounded-lg transition-all duration-200">
+            <div class="flex justify-between items-center">
+              <p class="font-medium text-foreground truncate w-4/5">{{ note.title }}</p>
+              <span class="text-xs text-muted-foreground flex-shrink-0">{{ note.created_at|timesince }} ago</span>
+            </div>
+            <p class="text-xs text-muted-foreground">
+              By {{ note.uploader.first_name|default:note.uploader.username }} | {{ note.category.name }}
+            </p>
+          </a>
+        {% empty %}
+          <p class="text-sm text-muted-foreground text-center pt-4">No notes uploaded yet.</p>
+        {% endfor %}
+      </div>
+    </div>
+  {% endcache %}
+
+  {% cache 300 leaderboard %}
+    <div class="bento-card md:col-span-3 lg:col-span-2 p-6 flex flex-col" style="--delay: 800ms;">
+      <div class="flex justify-between items-center mb-4">
+        <h3 class="text-lg font-semibold text-foreground">Community Leaderboard</h3>
+        <a href="#" class="text-sm font-medium text-primary hover:text-primary-light transition-all">View All</a>
+      </div>
+       <div class="space-y-3 max-h-96 overflow-y-auto pr-2 flex-1">
+        {% if top_users %}
+          {% for user in top_users %}
+            <div class="flex items-center justify-between p-3 hover:bg-muted/50 rounded-lg transition-all duration-200">
+              <div class="flex items-center gap-3">
+                <span class="text-lg font-bold text-muted-foreground">#{{ forloop.counter }}</span>
+                <p class="font-medium text-foreground">{{ user.get_full_name }}</p>
+              </div>
+              <span class="text-lg font-bold text-primary">{{ user.reputation }} REP</span>
+            </div>
+          {% endfor %}
+        {% else %}
+          <p class="text-sm text-muted-foreground text-center pt-4">Leaderboard is being calculated...</p>
+        {% endif %}
+      </div>
+    </div>
+  {% endcache %}
 
 </div>
 
