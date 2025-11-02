@@ -1,3 +1,406 @@
+/* 1. Import Tailwind's 'layers' */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* 2. Define all your variables and base styles in the 'base' layer */
+@layer base {
+  /* ==========================================================================
+  CORE THEME (from base.html)
+  This theme will apply to ALL pages
+  ========================================================================== 
+  */
+  :root {
+    /* --- NEON MINT THEME --- */
+    --background: hsl(220, 15%, 97%); 
+    --foreground: hsl(222, 20%, 25%); 
+    --card: hsl(0, 0%, 100%);
+    --card-foreground: hsl(222, 20%, 25%);
+    --popover: hsl(0, 0%, 100%);
+    --popover-foreground: hsl(222, 20%, 25%);
+    
+    --primary-light: hsl(145, 90%, 80%);
+    --primary: hsl(145, 70%, 45%);
+    --primary-dark: hsl(160, 80%, 35%);
+    --primary-foreground: hsl(0, 0%, 100%);
+
+    --secondary-light: hsl(220, 25%, 80%);
+    --secondary: hsl(220, 30%, 50%); 
+    --secondary-dark: hsl(220, 30%, 40%);
+    --secondary-foreground: hsl(0, 0%, 100%);
+    
+    --muted: hsl(220, 20%, 94%);
+    --muted-foreground: hsl(220, 15%, 45%);
+    --accent: hsl(135, 90%, 50%);
+    --destructive: hsl(0, 84%, 60%);
+    --destructive-foreground: hsl(0, 0%, 100%);
+    --border: hsl(220, 20%, 90%);
+    --input: hsl(220, 20%, 90%);
+    --ring: hsl(145, 70%, 45%); 
+
+    --chart-1: hsl(145, 70%, 45%);
+    --chart-2: hsl(160, 80%, 35%);
+    --chart-3: hsl(135, 90%, 50%);
+    --chart-4: hsl(180, 50%, 45%);
+    --chart-5: hsl(190, 60%, 40%);
+    
+    --font-sans: "Inter", "system-ui", sans-serif;
+    --font-serif: Georgia, serif;
+    --font-mono: Menlo, monospace;
+    --radius: 10px; 
+    --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.04);
+    --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.07), 0 1px 2px -1px rgb(0 0 0 / 0.07);
+    --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.07), 0 2px 4px -2px rgb(0 0 0 / 0.07);
+    --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.07), 0 4px 6px -4px rgb(0 0 0 / 0.07);
+    --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+    --shadow-2xl: 0 25px 50px -12px rgb(0 0 0 / 0.2);
+  }
+  .dark {
+    /* --- DARK MODE VARIANTS --- */
+    --background: hsl(222, 30%, 12%); 
+    --foreground: hsl(210, 20%, 90%);
+    --card: hsl(222, 30%, 15%);
+    --card-foreground: hsl(210, 20%, 90%);
+    --popover: hsl(222, 30%, 12%);
+    --popover-foreground: hsl(210, 20%, 90%);
+    
+    --primary-light: hsl(145, 70%, 55%);
+    --primary: hsl(145, 70%, 50%);
+    --primary-dark: hsl(150, 70%, 60%);
+    --primary-foreground: hsl(145, 100%, 10%);
+    
+    --secondary-light: hsl(220, 20%, 60%);
+    --secondary: hsl(220, 25%, 50%);
+    --secondary-dark: hsl(220, 25%, 40%);
+    --secondary-foreground: hsl(0, 0%, 100%);
+
+    --muted: hsl(222, 30%, 20%);
+    --muted-foreground: hsl(215, 16%, 55%);
+    --accent: hsl(135, 90%, 55%);
+    --destructive: hsl(0, 84%, 70%);
+    --destructive-foreground: hsl(0, 0%, 100%);
+    --border: hsl(222, 30%, 25%);
+    --input: hsl(222, 30%, 25%);
+    --ring: hsl(145, 70%, 50%);
+  }
+
+  /* ==========================================================================
+  CUSTOM CLASSES (from all your .html files)
+  ========================================================================== 
+  */
+
+  /* --- Base body styles --- */
+  body {
+    font-family: var(--font-sans), system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    background-color: var(--background);
+    transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+  }
+
+  /* --- Aurora Background (from base.html & landing.html) --- */
+  .aurora-bg {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    width: 100vw; height: 100vh;
+    z-index: -10;
+    background:
+        radial-gradient(at 20% 20%, var(--primary-dark) 0px, transparent 50%),
+        radial-gradient(at 80% 20%, var(--primary) 0px, transparent 50%),
+        radial-gradient(at 20% 80%, var(--accent) 0px, transparent 50%),
+        radial-gradient(at 80% 80%, var(--primary-dark) 0px, transparent 50%);
+    background-size: 200% 200%;
+    filter: blur(100px);
+    opacity: 0.1; 
+    /* This class must be paired with 'animate-aurora' in HTML to work */
+  }
+  .dark .aurora-bg {
+    opacity: 0.15; 
+  }
+  
+  /* --- Custom Scrollbar (from base.html) --- */
+  ::-webkit-scrollbar { width: 8px; height: 8px; }
+  ::-webkit-scrollbar-track { background: var(--muted); border-radius: 10px; }
+  ::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 10px; transition: background-color 0.2s ease; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--primary-dark); }
+  
+  /* --- Active Sidebar Link (from base.html) --- */
+  .sidebar-active {
+    color: var(--primary-foreground);
+    font-weight: 600; 
+    background: linear-gradient( 60deg, var(--primary), var(--primary-dark), var(--primary));
+    background-size: 300% 300%;
+    /* Pair this with 'animate-gradient-pulse' in HTML */
+    box-shadow: 0 0 20px 0px hsla(var(--primary-light), 0.4);
+    transform: scale(1.03);
+  }
+  .dark .sidebar-active { color: var(--primary-foreground); }
+  
+  /* --- Animated Gradient Button (from base.html & landing.html) --- */
+  .btn-primary {
+    color: var(--primary-foreground);
+    font-weight: 600;
+    background: linear-gradient( 60deg, var(--primary), var(--primary-dark), var(--primary));
+    background-size: 300% 300%;
+    /* Pair this with 'animate-gradient-pulse' or 'animate-gradient-pulse-fast' in HTML */
+    transition: all 0.3s ease-in-out;
+  }
+  .dark .btn-primary { color: var(--primary-foreground); }
+  
+  .btn-secondary {
+    color: var(--foreground);
+    background-color: var(--card);
+    border: 1px solid var(--border);
+    transition: all 0.3s ease-in-out;
+  }
+  .dark .btn-secondary { color: var(--foreground); }
+  .btn-secondary:hover {
+     transform: translateY(-2px) scale(1.02); 
+     box-shadow: var(--shadow-md);
+     border-color: var(--primary);
+     color: var(--primary);
+  }
+  /* Landing page buttons have a stronger hover */
+  .btn-primary:hover {
+    transform: translateY(-4px) scale(1.03);
+    box-shadow: 0 0 25px 0px hsla(var(--primary-light), 0.5);
+    filter: brightness(1.1);
+  }
+  
+  /* --- Card hover effects (from base.html) --- */
+  .stat-card:hover {
+    transform: translateY(-4px) scale(1.03);
+    box-shadow: var(--shadow-xl);
+    border-color: var(--primary); 
+  }
+  .table-row, .stat-card, nav a, button, .form-input, .form-select, .form-date, .tab-button {
+     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  a, button { transition: all 0.2s ease-in-out; }
+  .table-row:hover {
+    background-color: var(--muted);
+    transform: scale(1.01);
+    box-shadow: var(--shadow-md);
+    z-index: 10;
+    position: relative;
+  }
+  nav a:hover i { transform: scale(1.2) rotate(8deg); }
+  nav a i { transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); }
+  
+  /* --- Message/Toast Styles (from base.html) --- */
+  .message-list {
+    list-style: none; padding: 0; margin: 0;
+    position: fixed; top: 80px; right: 24px;
+    z-index: 1000; width: 320px;
+  }
+  .message-item {
+    padding: 1rem 1.25rem; margin-bottom: 1rem;
+    border-radius: var(--radius);
+    font-weight: 500; font-size: 0.875rem; 
+    box-shadow: var(--shadow-lg);
+    display: flex; align-items: center; gap: 0.75rem;
+    background-color: hsla(222, 30%, 15%, 0.5);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    /* Pair this with 'animate-slide-in-left' in HTML */
+  }
+  .message-item.success {
+    border: 1px solid hsl(145, 70%, 50%, 0.5);
+    color: hsl(145, 70%, 80%);
+  }
+  .message-item.info {
+    border: 1px solid hsl(210, 90%, 60%, 0.5);
+    color: hsl(210, 90%, 80%);
+  }
+  .message-item.error {
+    border: 1px solid hsl(0, 90%, 60%, 0.5);
+    color: hsl(0, 90%, 80%);
+  }
+  .light .message-item {
+    background-color: hsla(0, 0%, 100%, 0.7);
+  }
+  .light .message-item.success {
+    border-color: hsl(145, 70%, 80%);
+    color: hsl(145, 70%, 20%);
+  }
+   .light .message-item.info {
+    border-color: hsl(210, 100%, 85%);
+    color: hsl(210, 90%, 40%);
+  }
+   .light .message-item.error {
+    border-color: hsl(0, 100%, 90%);
+    color: hsl(0, 90%, 40%);
+  }
+  
+  /* --- Stagger Animations (from base.html) --- */
+  .stagger-animation {
+    opacity: 0;
+    /* Pair this with 'animate-fade-in-up' in HTML */
+  }
+  .stagger-table-row {
+    opacity: 0;
+    /* Pair this with 'animate-slide-in-left' in HTML */
+  }
+
+  /* --- Form Input Styles (from base.html & register.html) --- */
+  .form-input, .form-select, .form-date {
+    background-color: var(--background);
+    border: 1px solid var(--border);
+    color: var(--foreground);
+    border-radius: var(--radius);
+    padding: 0.4rem 0.75rem;
+    font-size: 0.875rem; 
+    transition: all 0.3s ease-in-out;
+    box-shadow: var(--shadow-sm);
+    width: 100%;
+  }
+  .form-input:focus, .form-select:focus, .form-date:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px var(--primary-light);
+  }
+  .dark .form-input:focus, .dark .form-select:focus, .dark .form-date:focus {
+     box-shadow: 0 0 0 3px hsl(145, 70%, 45%, 0.3);
+  }
+  /* Special auth page form inputs */
+  .auth-page .form-input, .auth-page .form-select {
+    padding: 0.75rem 1rem;
+  }
+  .form-select-wrapper {
+    position: relative;
+  }
+  .form-select-wrapper::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    right: 1rem;
+    width: 0.5rem;
+    height: 0.5rem;
+    border-bottom: 2px solid var(--foreground);
+    border-right: 2px solid var(--foreground);
+    transform: translateY(-75%) rotate(45deg);
+    pointer-events: none;
+    opacity: 0.5;
+  }
+  
+  /* --- Bento Card (from base.html & landing.html) --- */
+  .bento-card {
+    background-color: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-lg);
+    transition: all 0.3s ease-in-out;
+    position: relative;
+    overflow: hidden;
+  }
+  .bento-card:hover {
+    transform: translateY(-6px);
+    border-color: var(--primary);
+    box-shadow: 0 0 25px 0px hsla(var(--primary-light), 0.3);
+  }
+  .bento-card i {
+    color: var(--primary);
+  }
+  .bento-card::before { /* Mouse follow effect from landing */
+    content: "";
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: radial-gradient(
+      800px circle at var(--mouse-x, 0) var(--mouse-y, 0),
+      hsla(145, 70%, 50%, 0.15),
+      transparent 40%
+    );
+    opacity: 0;
+    transition: opacity 0.5s;
+  }
+  .bento-card:hover::before {
+    opacity: 1;
+  }
+  
+  /* --- Tagify Styles (from base.html) --- */
+  .tagify {
+    --tag-bg: var(--primary);
+    --tag-text-color: var(--primary-foreground);
+    --tag-remove-btn-color: var(--primary-foreground);
+    --tag-remove-btn-bg--hover: var(--primary-dark);
+    border: 0;
+    border-radius: var(--radius);
+    background-color: var(--background);
+    border: 1px solid var(--border);
+    padding: 0.15rem 0.75rem; 
+    font-size: 0.875rem;
+  }
+  .dark .tagify {
+     background-color: var(--background);
+     --tag-bg: var(--primary);
+     --tag-text-color: var(--primary-foreground);
+     --tag-remove-btn-color: var(--primary-foreground);
+     --tag-remove-btn-bg--hover: var(--primary-dark);
+  }
+  .tagify:hover {
+    border-color: var(--border);
+  }
+  .tagify.tagify--focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px hsl(145, 70%, 45%, 0.3);
+  }
+  .tagify__tag {
+    font-weight: 600;
+    font-size: 0.8rem;
+    padding-top: 0.2em;
+    padding-bottom: 0.2em;
+  }
+  .dark .tagify__tag {
+    --tag-text-color: var(--primary-foreground);
+  }
+  .tagify__input {
+    color: var(--muted-foreground); 
+  }
+  .dark .tagify__input {
+    color: var(--muted-foreground);
+  }
+  
+  /* --- Glassmorphism Card (from login/register.html) --- */
+  .glass-card {
+    background: hsla(0, 0%, 100%, 0.6);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid hsla(0, 0%, 100%, 0.2);
+    box-shadow: var(--shadow-2xl);
+  }
+  .dark .glass-card {
+     background: hsla(222, 30%, 15%, 0.6);
+     border: 1px solid hsla(222, 30%, 25%, 0.5);
+  }
+
+  /* --- Hero Gradient Text (from landing.html) --- */
+  .hero-gradient-text {
+    background: linear-gradient( 60deg, var(--primary-light), var(--primary));
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .dark .hero-gradient-text {
+     background: linear-gradient( 60deg, var(--primary), var(--primary-dark));
+     -webkit-background-clip: text;
+     background-clip: text;
+     -webkit-text-fill-color: transparent;
+  }
+  
+  /* --- Hero Mockup Cards (from landing.html) --- */
+  .mockup-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1rem;
+    box-shadow: var(--shadow-xl);
+    transition: all 0.3s ease-in-out;
+  }
+  
+  /* --- Theme Toggle Icons (from landing.html) --- */
+  .dark #theme-toggle .dark-icon { display: block; }
+  .dark #theme-toggle .light-icon { display: none; }
+  #theme-toggle .dark-icon { display: none; }
+  #theme-toggle .light-icon { display: block; }
+}

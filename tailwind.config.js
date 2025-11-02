@@ -53,16 +53,17 @@ module.exports = {
           1: "var(--chart-1)",
           2: "var(--chart-2)",
           3: "var(--chart-3)",
-          "4.": "var(--chart-4)", // Note: The key was "4." in the original, keeping it.
+          "4.": "var(--chart-4)",
           5: "var(--chart-5)",
         },
       },
       fontFamily: {
-        sans: ["var(--font-sans)"],
+        sans: ["var(--font-sans)", "system-ui", "sans-serif"],
         serif: ["var(--font-serif)"],
         mono: ["var(--font-mono)"],
       },
       keyframes: {
+        // Keyframes from base.html
         "accordion-down": {
           from: { height: "0" },
           to: { height: "var(--radix-accordion-content-height)" },
@@ -76,16 +77,12 @@ module.exports = {
           "50%": { backgroundPosition: "100% 50%" },
           "100%": { backgroundPosition: "0% 50%" },
         },
-        "aurora": {
-          "from": { backgroundPosition: "50% 50%, 50% 50%" },
-          "to": { backgroundPosition: "350% 50%, 350% 50%" },
-        },
         "slide-in-left": {
           "from": { opacity: 0, transform: "translateX(-20px)" },
           "to": { opacity: 1, transform: "translateX(0)" },
         },
-        "fadeIn": {
-          "from": { opacity: 0, transform: "translateY(10px)" },
+        "fadeIn": { // This is a merge of base.html and landing.html
+          "from": { opacity: 0, transform: "translateY(20px)" },
           "to": { opacity: 1, transform: "translateY(0)" },
         },
         "pulse-soft": {
@@ -95,20 +92,35 @@ module.exports = {
         "shimmer": {
           "100%": { transform: "translateX(100%)" },
         },
+        
+        // Keyframes from landing.html
+        "aurora": {
+          "from": { backgroundPosition: "50% 50%, 50% 50%" },
+          "to": { backgroundPosition: "350% 50%, 350% 50%" },
+        },
+        "hero-glow": {
+           "0%, 100%": { opacity: 0.2, transform: "scale(0.8)" },
+           "50%": { opacity: 0.4, transform: "scale(1)" }
+        }
       },
       animation: {
+        // --- FAST, ONE-TIME ANIMATIONS (KEEP THESE) ---
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
-        "gradient-pulse": "gradient-animation 8s ease-in-out infinite",
-        "aurora": "aurora 60s linear infinite", 
         "fade-in-up": "fadeIn 0.5s ease-out forwards",
         "slide-in-left": "slide-in-left 0.5s ease-out forwards",
         "pulse-soft": "pulse-soft 2s infinite",
         "shimmer": "shimmer 1.5s infinite",
+        
+        // --- LAGGING, CONSTANT ANIMATIONS (REMOVE THESE) ---
+        // "gradient-pulse": "gradient-animation 8s ease-in-out infinite",
+        // "aurora": "aurora 60s linear infinite", 
+        // "gradient-pulse-fast": "gradient-animation 6s ease-in-out infinite",
+        // "hero-glow": "hero-glow 8s ease-in-out infinite",
       },
     },
   },
   plugins: [
-    require('@tailwindcss/forms'), // This will help style your form fields
+    require('@tailwindcss/forms'),
   ],
 }

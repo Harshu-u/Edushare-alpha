@@ -1,248 +1,28 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en" class="dark"> <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Welcome to EduShare - The Future of Notes</title>
 
-    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="{% static 'css/output.css' %}" rel="stylesheet" />
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     
-    <script>
-      tailwind.config = {
-        darkMode: ["class"],
-        theme: {
-          extend: {
-            borderRadius: {
-              lg: "var(--radius)",
-              md: "calc(var(--radius) - 2px)",
-              sm: "calc(var(--radius) - 4px)",
-            },
-            colors: {
-              background: "var(--background)",
-              foreground: "var(--foreground)",
-              card: {
-                DEFAULT: "var(--card)",
-                foreground: "var(--card-foreground)",
-              },
-              popover: {
-                DEFAULT: "var(--popover)",
-                foreground: "var(--popover-foreground)",
-              },
-              primary: {
-                light: "var(--primary-light)",
-                DEFAULT: "var(--primary)",
-                dark: "var(--primary-dark)",
-                foreground: "var(--primary-foreground)",
-              },
-              secondary: {
-                light: "var(--secondary-light)",
-                DEFAULT: "var(--secondary)",
-                dark: "var(--secondary-dark)",
-                foreground: "var(--secondary-foreground)",
-              },
-              muted: {
-                DEFAULT: "var(--muted)",
-                foreground: "var(--muted-foreground)",
-              },
-              accent: {
-                DEFAULT: "var(--accent)",
-                foreground: "var(--accent-foreground)",
-              },
-              destructive: {
-                DEFAULT: "var(--destructive)",
-                foreground: "var(--destructive-foreground)",
-              },
-              border: "var(--border)",
-              input: "var(--input)",
-              ring: "var(--ring)",
-            },
-            fontFamily: {
-              sans: ["var(--font-sans)", "system-ui", "sans-serif"],
-            },
-            keyframes: {
-              "gradient-animation": {
-                "0%": { backgroundPosition: "0% 50%" },
-                "50%": { backgroundPosition: "100% 50%" },
-                "100%": { backgroundPosition: "0% 50%" },
-              },
-              "fadeIn": {
-                "from": { opacity: 0, transform: "translateY(20px)" },
-                "to": { opacity: 1, transform: "translateY(0)" },
-              },
-              /* --- NEW: Aurora Keyframes --- */
-              "aurora": {
-                "from": { backgroundPosition: "50% 50%, 50% 50%" },
-                "to": { backgroundPosition: "350% 50%, 350% 50%" },
-              },
-              "hero-glow": {
-                 "0%, 100%": { opacity: 0.2, transform: "scale(0.8)" },
-                 "50%": { opacity: 0.4, transform: "scale(1)" }
-              }
-            },
-            animation: {
-              "gradient-pulse": "gradient-animation 6s ease-in-out infinite",
-              "fade-in-up": "fadeIn 0.6s ease-out forwards",
-              /* --- NEW: Aurora Animation --- */
-              "aurora": "aurora 60s linear infinite",
-              "hero-glow": "hero-glow 8s ease-in-out infinite",
-            },
-          },
-        },
-      }
-    </script>
-
     <script src="https://unpkg.com/lucide@latest"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
     <style type="text/css">
-      :root {
-        /* --- NEON MINT THEME --- */
-        --background: hsl(220, 15%, 97%);
-        --foreground: hsl(222, 20%, 25%);
-        --card: hsl(0, 0%, 100%);
-        --card-foreground: hsl(222, 20%, 25%);
-        --popover: hsl(0, 0%, 100%);
-        --popover-foreground: hsl(222, 20%, 25%);
-        
-        --primary-light: hsl(145, 90%, 80%);
-        --primary: hsl(145, 70%, 45%); /* Main Minty Green */
-        --primary-dark: hsl(160, 80%, 35%); /* Dark Teal for gradient */
-        --primary-foreground: hsl(0, 0%, 100%);
-
-        --muted: hsl(220, 20%, 94%);
-        --muted-foreground: hsl(220, 15%, 45%);
-        --accent: hsl(135, 90%, 50%); /* Sharp Neon Green */
-        --border: hsl(220, 20%, 90%);
-        --input: hsl(220, 20%, 90%);
-        --ring: hsl(145, 70%, 45%);
-        --radius: 10px;
-        --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.07), 0 4px 6px -4px rgb(0 0 0 / 0.07);
-        --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
-      }
-      .dark {
-        /* --- DARK MODE VARIANTS --- */
-        --background: hsl(222, 30%, 12%);
-        --foreground: hsl(210, 20%, 90%);
-        --card: hsl(222, 30%, 15%);
-        --card-foreground: hsl(210, 20%, 90%);
-        --popover: hsl(222, 30%, 12%);
-        --popover-foreground: hsl(210, 20%, 90%);
-        
-        --primary-light: hsl(145, 70%, 55%);
-        --primary: hsl(145, 70%, 50%); /* Bright Mint Green */
-        --primary-dark: hsl(150, 70%, 60%);
-        --primary-foreground: hsl(145, 100%, 10%);
-        
-        --muted: hsl(222, 30%, 20%);
-        --muted-foreground: hsl(215, 16%, 55%);
-        --accent: hsl(135, 90%, 55%);
-        --border: hsl(222, 30%, 25%);
-        --input: hsl(222, 30%, 25%);
-        --ring: hsl(145, 70%, 50%);
-      }
+      /*
+        All old styles are GONE. They are now in your output.css.
+        We only keep these small, necessary styles.
+      */
       body {
-        font-family: var(--font-sans), system-ui, sans-serif;
-        -webkit-font-smoothing: antialiased;
-        -moz-osx-font-smoothing: grayscale;
-        background-color: var(--background);
-        color: var(--foreground);
-        transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+        font-family: "Inter", "system-ui", sans-serif;
       }
       
-      /* --- NEW: Aurora Background --- */
-      .aurora-bg {
-        position: fixed;
-        top: 0; left: 0; right: 0; bottom: 0;
-        width: 100vw; height: 100vh;
-        z-index: -10;
-        background:
-            radial-gradient(at 20% 20%, var(--primary-dark) 0px, transparent 50%),
-            radial-gradient(at 80% 20%, var(--primary) 0px, transparent 50%),
-            radial-gradient(at 20% 80%, var(--accent) 0px, transparent 50%),
-            radial-gradient(at 80% 80%, var(--primary-dark) 0px, transparent 50%);
-        background-size: 200% 200%;
-        filter: blur(100px);
-        opacity: 0.15;
-        animation: aurora 60s linear infinite;
-      }
-      .dark .aurora-bg {
-        opacity: 0.2;
-      }
-      
-      /* --- NEW: Button Glow Effect --- */
-      .btn-primary {
-        color: var(--primary-foreground);
-        font-weight: 600;
-        background: linear-gradient( 60deg, var(--primary), var(--primary-dark), var(--primary));
-        background-size: 300% 300%;
-        animation: gradient-animation 8s ease-in-out infinite;
-        transition: all 0.3s ease-in-out;
-      }
-      .dark .btn-primary { color: var(--primary-foreground); }
-      .btn-primary:hover {
-        transform: translateY(-4px) scale(1.05);
-        box-shadow: 0 0 25px 0px hsla(var(--primary-light), 0.5); /* NEON GLOW */
-        filter: brightness(1.1);
-      }
-      
-      .btn-secondary {
-        color: var(--foreground);
-        background-color: var(--card);
-        border: 1px solid var(--border);
-        transition: all 0.3s ease-in-out;
-      }
-      .dark .btn-secondary { color: var(--foreground); }
-      .btn-secondary:hover {
-         transform: translateY(-4px) scale(1.05);
-         box-shadow: var(--shadow-lg);
-         border-color: var(--primary);
-         color: var(--primary);
-      }
-
-      /* --- NEW: Theme Toggle Icons --- */
-      .dark #theme-toggle .dark-icon { display: block; }
-      .dark #theme-toggle .light-icon { display: none; }
-      #theme-toggle .dark-icon { display: none; }
-      #theme-toggle .light-icon { display: block; }
-      
-      /* --- NEW: Hero Gradient Text --- */
-      .hero-gradient-text {
-        background: linear-gradient( 60deg, var(--primary-light), var(--primary));
-        -webkit-background-clip: text;
-        background-clip: text;
-        -webkit-text-fill-color: transparent;
-      }
-      .dark .hero-gradient-text {
-         background: linear-gradient( 60deg, var(--primary), var(--primary-dark));
-         -webkit-background-clip: text;
-         background-clip: text;
-         -webkit-text-fill-color: transparent;
-      }
-      
-      /* --- NEW: Hero Mockup Cards --- */
-      .mockup-card {
-        background: var(--card);
-        border: 1px solid var(--border);
-        border-radius: var(--radius);
-        padding: 1rem;
-        box-shadow: var(--shadow-xl);
-        transition: all 0.3s ease-in-out;
-      }
-      
-      /* --- NEW: Bento Grid Cards --- */
-      .bento-card {
-        background-color: var(--card);
-        border: 1px solid var(--border);
-        border-radius: var(--radius);
-        padding: 1.5rem;
-        box-shadow: var(--shadow-lg);
-        transition: all 0.3s ease-in-out;
-        position: relative;
-        overflow: hidden;
-      }
       .bento-card::before {
         content: "";
         position: absolute;
@@ -250,7 +30,7 @@
         width: 100%; height: 100%;
         background: radial-gradient(
           800px circle at var(--mouse-x, 0) var(--mouse-y, 0),
-          hsla(145, 70%, 50%, 0.15), /* Use primary color */
+          hsla(145, 70%, 50%, 0.15),
           transparent 40%
         );
         opacity: 0;
@@ -259,17 +39,15 @@
       .bento-card:hover::before {
         opacity: 1;
       }
-      .bento-card:hover {
-        transform: translateY(-6px);
-        border-color: var(--primary);
-      }
-      .bento-card i {
-        color: var(--primary);
-      }
-
+      
+      /* Theme toggle icons */
+      .dark #theme-toggle .dark-icon { display: block; }
+      .dark #theme-toggle .light-icon { display: none; }
+      #theme-toggle .dark-icon { display: none; }
+      #theme-toggle .light-icon { display: block; }
     </style>
 </head>
-<body class="relative overflow-x-hidden" x-data="{}">
+<body class="relative overflow-x-hidden bg-background text-foreground" x-data="{}">
 
     <div class="aurora-bg"></div>
 
@@ -287,7 +65,8 @@
                 
                 <div class="hidden md:flex md:space-x-8">
                     <a href="#features" class="font-medium text-muted-foreground hover:text-primary transition-colors">Features</a>
-                    <a href="#about" class="font-medium text-muted-foreground hover:text-primary transition-colors">About</a>
+                    <a href="#why" class="font-medium text-muted-foreground hover:text-primary transition-colors">Why Us</a>
+                    <a href="#footer" class="font-medium text-muted-foreground hover:text-primary transition-colors">About</a>
                 </div>
                 
                 <div class="flex items-center space-x-2">
@@ -321,17 +100,17 @@
                         <span class="block hero-gradient-text xl:inline mt-2">Get Better Grades.</span>
                     </h1>
                     <p class="mt-6 text-lg sm:text-xl text-muted-foreground max-w-xl">
-                        EduShare is the open-source platform built for students. 
-                        Upload, discover, and rate class notes to help everyone learn faster.
+                        Stop hunting for messy notes. EduShare is the open-source platform where students and teachers collaborate to build the ultimate library of high-quality, top-rated study materials.
                     </p>
                     <div class="mt-10 flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
                         <a href="{% url 'register' %}" 
                            class="btn-primary inline-flex items-center justify-center px-7 py-3 text-base font-medium rounded-lg shadow-lg focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2">
                             Get Started - It's Free
                         </a>
-                        <a href="#features" 
+                        <a href="{% url 'notes:note-list' %}" 
                            class="btn-secondary inline-flex items-center justify-center px-7 py-3 text-base font-medium rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2">
-                            Learn More
+                           <i data-lucide="binoculars" class="w-4 h-4 mr-2"></i>
+                            Browse as Guest
                         </a>
                     </div>
                 </div>
@@ -339,7 +118,7 @@
                 <div class="relative hidden lg:block animate-fade-in-up" style="animation-delay: 300ms;">
                     <div class="relative w-full h-96">
                         
-                        <div class="absolute inset-0 -top-10 -left-10 w-full h-full rounded-full bg-primary/30 dark:bg-primary/50 filter blur-3xl opacity-30 animate-hero-glow"></div>
+                        <div class="absolute inset-0 -top-10 -left-10 w-full h-full rounded-full bg-primary/30 dark:bg-primary/50 filter blur-3xl opacity-30"></div>
 
                         <div class="mockup-card absolute top-0 left-10 w-72 transform rotate-6 hover:rotate-2 hover:scale-105">
                             <h4 class="font-semibold text-foreground">Data Structures</h4>
@@ -347,11 +126,7 @@
                             <div class="flex items-center justify-between mt-3">
                                 <span class="text-xs font-medium text-primary bg-primary/10 px-2 py-1 rounded-full">PDF</span>
                                 <div class="flex text-yellow-500">
-                                    <i data-lucide="star" class="w-4 h-4 fill-current"></i>
-                                    <i data-lucide="star" class="w-4 h-4 fill-current"></i>
-                                    <i data-lucide="star" class="w-4 h-4 fill-current"></i>
-                                    <i data-lucide="star" class="w-4 h-4 fill-current"></i>
-                                    <i data-lucide="star-half" class="w-4 h-4 fill-current"></i>
+                                    <i data-lucide="star" class="w-4 h-4 fill-current"></i><i data-lucide="star" class="w-4 h-4 fill-current"></i><i data-lucide="star" class="w-4 h-4 fill-current"></i><i data-lucide="star" class="w-4 h-4 fill-current"></i><i data-lucide="star-half" class="w-4 h-4 fill-current"></i>
                                 </div>
                             </div>
                         </div>
@@ -362,11 +137,7 @@
                              <div class="flex items-center justify-between mt-3">
                                 <span class="text-xs font-medium text-blue-500 bg-blue-500/10 px-2 py-1 rounded-full">DOCX</span>
                                 <div class="flex text-yellow-500">
-                                    <i data-lucide="star" class="w-4 h-4 fill-current"></i>
-                                    <i data-lucide="star" class="w-4 h-4 fill-current"></i>
-                                    <i data-lucide="star" class="w-4 h-4 fill-current"></i>
-                                    <i data-lucide="star" class="w-4 h-4 fill-current"></i>
-                                    <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                                    <i data-lucide="star" class="w-4 h-4 fill-current"></i><i data-lucide="star" class="w-4 h-4 fill-current"></i><i data-lucide="star" class="w-4 h-4 fill-current"></i><i data-lucide="star" class="w-4 h-4 fill-current"></i><i data-lucide="star" class="w-4 h-4 fill-current"></i>
                                 </div>
                             </div>
                         </div>
@@ -377,11 +148,7 @@
                              <div class="flex items-center justify-between mt-3">
                                 <span class="text-xs font-medium text-orange-500 bg-orange-500/10 px-2 py-1 rounded-full">PPT</span>
                                 <div class="flex text-yellow-500">
-                                    <i data-lucide="star" class="w-4 h-4 fill-current"></i>
-                                    <i data-lucide="star" class="w-4 h-4 fill-current"></i>
-                                    <i data-lucide="star" class="w-4 h-4 fill-current"></i>
-                                    <i data-lucide="star" class="w-4 h-4"></i>
-                                    <i data-lucide="star" class="w-4 h-4"></i>
+                                    <i data-lucide="star" class="w-4 h-4 fill-current"></i><i data-lucide="star" class="w-4 h-4 fill-current"></i><i data-lucide="star" class="w-4 h-4 fill-current"></i><i data-lucide="star" class="w-4 h-4"></i><i data-lucide="star" class="w-4 h-4"></i>
                                 </div>
                             </div>
                         </div>
@@ -391,49 +158,104 @@
             </div>
         </section>
 
-        <section id="features" class="py-20 lg:py-32">
+        <section id="why" class="py-20 lg:py-32">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="text-center">
                     <h2 class="text-base font-semibold text-primary tracking-wide uppercase">Why EduShare?</h2>
                     <p class="mt-2 text-3xl font-extrabold text-foreground sm:text-5xl tracking-tighter">
-                        A Smarter Way to Study
+                        A Smarter Way to Study.
                     </p>
                 </div>
 
-                <div class="mt-16 grid grid-cols-1 lg:grid-cols-3 gap-6" id="bento-grid">
+                <div class="mt-16 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="bento-grid">
+                    
+                    <div class="bento-card lg:col-span-1">
+                        <i data-lucide="award" class="w-10 h-10 mb-4"></i>
+                        <h3 class="mt-4 text-2xl font-bold text-foreground">Find Gold, Not Garbage</h3>
+                        <p class="mt-2 text-base text-muted-foreground">
+                           Tired of scrolling through junk? Our community rates every note. Sort by top-rated to find the best, most-trusted materials instantly.
+                        </p>
+                    </div>
                     
                     <div class="bento-card lg:col-span-2">
-                        <i data-lucide="upload-cloud" class="w-10 h-10 mb-4"></i>
-                        <h3 class="mt-4 text-2xl font-bold text-foreground">Drag. Drop. Done.</h3>
+                        <i data-lucide="search-slash" class="w-10 h-10 mb-4"></i>
+                        <h3 class="mt-4 text-2xl font-bold text-foreground">Search Smarter, Not Harder</h3>
                         <p class="mt-2 text-base text-muted-foreground">
-                            Easily upload your PDF, DOCX, and PPT files with a simple drag-and-drop interface. 
-                            Your notes are processed and available in seconds.
-                        </p>
-                    </div>
-
-                    <div class="bento-card lg:col-span-1">
-                        <i data-lucide="star" class="w-10 h-10 mb-4"></i>
-                        <h3 class="mt-4 text-2xl font-bold text-foreground">Find the Best</h3>
-                        <p class="mt-2 text-base text-muted-foreground">
-                           Rate the notes you read. Sort by top-rated to find the best community-vetted materials.
-                        </p>
-                    </div>
-                    
-                    <div class="bento-card lg:col-span-1">
-                        <i data-lucide="search" class="w-10 h-10 mb-4"></i>
-                        <h3 class="mt-4 text-2xl font-bold text-foreground">Powerful Search</h3>
-                        <p class="mt-2 text-base text-muted-foreground">
-                           Find exactly what you need by searching subject, category, or uploader.
+                           Our blazing-fast search scans titles, descriptions, tags, and even uploader names. Find exactly what you need for 'DSA' or 'sem4' in seconds.
                         </p>
                     </div>
 
                     <div class="bento-card lg:col-span-2">
                          <i data-lucide="users" class="w-10 h-10 mb-4"></i>
-                        <h3 class="mt-4 text-2xl font-bold text-foreground">By Students, For Students</h3>
+                        <h3 class="mt-4 text-2xl font-bold text-foreground">For Students, By Students</h3>
                         <p class="mt-2 text-base text-muted-foreground">
                             This isn't a corporate product. It's an open-source tool built to
-                            actually help you and your classmates succeed.
+                            actually help you and your classmates succeed. No ads, no paywalls. Ever.
                         </p>
+                    </div>
+                    
+                    <div class="bento-card lg:col-span-1">
+                        <i data-lucide="trending-up" class="w-10 h-10 mb-4"></i>
+                        <h3 class="mt-4 text-2xl font-bold text-foreground">Earn Your Rank</h3>
+                        <p class="mt-2 text-base text-muted-foreground">
+                           Gain reputation points for every good note you upload and every helpful rating you give. Climb the leaderboard and become a top contributor.
+                        </p>
+                    </div>
+                    
+                    <div class="bento-card lg:col-span-3">
+                        <i data-lucide="shield-check" class="w-10 h-10 mb-4"></i>
+                        <h3 class="mt-4 text-2xl font-bold text-foreground">Teacher & Admin Approved</h3>
+                        <p class="mt-2 text-base text-muted-foreground">
+                           This platform isn't the wild west. Teachers and staff can manage categories, verify notes, and remove low-quality content, ensuring the library stays clean and trustworthy.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section class="py-20 lg:py-32 bg-muted/30 dark:bg-muted/10">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center">
+                    <h2 class="text-3xl font-extrabold text-foreground sm:text-5xl tracking-tighter">
+                        Don't Just Take Our Word For It
+                    </h2>
+                    <p class="mt-4 text-lg text-muted-foreground max-w-2xl mx-auto">
+                        See what other students and teachers are saying about the platform.
+                    </p>
+                </div>
+                
+                <div class="mt-16 grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="bento-card p-6" style="transform: rotate(-1deg);">
+                        <div class="flex items-center gap-4 mb-4">
+                            <span class="w-12 h-12 rounded-full bg-primary/10 text-primary flex items-center justify-center font-bold text-lg">AS</span>
+                            <div>
+                                <h4 class="font-semibold text-foreground">Aman S. (BCA)</h4>
+                                <p class="text-sm text-muted-foreground">Student</p>
+                            </div>
+                        </div>
+                        <p class="text-foreground/90">"The 'Top Rated' sort is a lifesaver. I found the perfect DSA notes for my final exam in 30 seconds. 10/10."</p>
+                    </div>
+                    
+                    <div class="bento-card p-6" style="transform: rotate(1deg) scale(1.05);">
+                        <div class="flex items-center gap-4 mb-4">
+                            <span class="w-12 h-12 rounded-full bg-secondary/10 text-secondary flex items-center justify-center font-bold text-lg">RP</span>
+                            <div>
+                                <h4 class="font-semibold text-foreground">Prof. R. Patel</h4>
+                                <p class="text-sm text-muted-foreground">Teacher</p>
+                            </div>
+                        </div>
+                        <p class="text-foreground/90">"I upload my lecture slides and supplementary notes here. The reputation system encourages students to share their *good* work, not just *any* work. It's fantastic."</p>
+                    </div>
+                    
+                    <div class="bento-card p-6" style="transform: rotate(-0.5deg);">
+                        <div class="flex items-center gap-4 mb-4">
+                            <span class="w-12 h-12 rounded-full bg-primary/10 text-primary flex items-center justify-center font-bold text-lg">JK</span>
+                            <div>
+                                <h4 class="font-semibold text-foreground">J. Kaur (MCA)</h4>
+                                <p class="text-sm text-muted-foreground">Student</Read_Me>
+                            </div>
+                        </div>
+                        <p class="text-foreground/90">"I'm hoarding so many notes. Finally a place to upload them and get some REP for it. The UI is clean and fast."</p>
                     </div>
                 </div>
             </div>
@@ -441,10 +263,26 @@
 
     </main>
 
-    <footer id="about" class="bg-card border-t border-border mt-20">
-        <div class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8 text-center">
-            <p class="text-base text-muted-foreground">
-                &copy; 2025 EduShare. Built with 💚.
+    <footer id="footer" class="bg-card border-t border-border mt-20">
+        <div class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row justify-between items-center gap-8">
+                <div class="flex-shrink-0 flex items-center gap-2">
+                    <div class="w-8 h-8 btn-primary rounded-lg flex items-center justify-center text-primary-foreground font-bold text-sm shadow-md">
+                      ES
+                    </div>
+                    <span class="text-xl font-bold text-foreground">
+                        EduShare
+                    </span>
+                </div>
+                <div class="flex flex-wrap gap-x-6 gap-y-2 justify-center">
+                    <a href="#" class="font-medium text-muted-foreground hover:text-primary transition-colors">Home</a>
+                    <a href="#features" class="font-medium text-muted-foreground hover:text-primary transition-colors">Features</a>
+                    <a href="#why" class="font-medium text-muted-foreground hover:text-primary transition-colors">Why Us</a>
+                    <a href="{% url 'login' %}" class="font-medium text-muted-foreground hover:text-primary transition-colors">Login</a>
+                </div>
+            </div>
+            <p class="text-base text-muted-foreground text-center mt-8 pt-8 border-t border-border/50">
+                &copy; 2025 EduShare. An Open-Source Project.
             </p>
         </div>
     </footer>
@@ -474,11 +312,9 @@
             if (savedTheme) {
                  applyTheme(savedTheme);
             }
-            // No saved theme, but system is dark (and we default to dark)
             else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
                  applyTheme('dark');
             } 
-            // No saved theme, system is light (so remove default dark)
             else {
                  applyTheme('light');
             }

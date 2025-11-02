@@ -1,6 +1,6 @@
 {% load static %}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,164 +11,10 @@
     <script src="https://unpkg.com/lucide@latest"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
-    <style type="text/css">
-      :root {
-        /* --- NEW: NEON MINT THEME --- */
-        --background: hsl(220, 15%, 97%);
-        --foreground: hsl(222, 20%, 25%);
-        --card: hsl(0, 0%, 100%);
-        --card-foreground: hsl(222, 20%, 25%);
-        --popover: hsl(0, 0%, 100%);
-        --popover-foreground: hsl(222, 20%, 25%);
-        
-        --primary-light: hsl(145, 90%, 80%);
-        --primary: hsl(145, 70%, 45%); /* Main Minty Green */
-        --primary-dark: hsl(160, 80%, 35%); /* Dark Teal for gradient */
-        --primary-foreground: hsl(0, 0%, 100%);
+    </head>
+<body class="auth-page text-foreground flex items-center justify-center min-h-screen p-4">
 
-        --secondary-light: hsl(220, 25%, 80%);
-        --secondary: hsl(220, 30%, 50%);
-        --secondary-dark: hsl(220, 30%, 40%);
-        --secondary-foreground: hsl(0, 0%, 100%);
-        
-        --muted: hsl(220, 20%, 94%);
-        --muted-foreground: hsl(220, 15%, 45%);
-        --accent: hsl(135, 90%, 50%);
-        --accent-foreground: hsl(222, 20%, 25%);
-        --destructive: hsl(0, 84%, 60%);
-        --destructive-foreground: hsl(0, 0%, 100%);
-        --border: hsl(220, 20%, 90%);
-        --input: hsl(220, 20%, 90%);
-        --ring: hsl(145, 70%, 45%);
-        
-        --font-sans: "Inter", "system-ui", sans-serif;
-        --font-serif: Georgia, serif;
-        --font-mono: Menlo, monospace;
-        --radius: 10px; /* NEW: Sharper */
-        --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.04);
-        --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.07), 0 1px 2px -1px rgb(0 0 0 / 0.07);
-        --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.07), 0 2px 4px -2px rgb(0 0 0 / 0.07);
-        --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.07), 0 4px 6px -4px rgb(0 0 0 / 0.07);
-        --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
-        --shadow-2xl: 0 25px 50px -12px rgb(0 0 0 / 0.2);
-      }
-      .dark {
-        /* --- NEW: DARK MODE VARIANTS --- */
-        --background: hsl(222, 30%, 12%);
-        --foreground: hsl(210, 20%, 90%);
-        --card: hsl(222, 30%, 15%);
-        --card-foreground: hsl(210, 20%, 90%);
-        --popover: hsl(222, 30%, 12%);
-        --popover-foreground: hsl(210, 20%, 90%);
-        
-        --primary-light: hsl(145, 70%, 55%);
-        --primary: hsl(145, 70%, 50%);
-        --primary-dark: hsl(150, 70%, 60%);
-        --primary-foreground: hsl(145, 100%, 10%);
-        
-        --secondary-light: hsl(220, 20%, 60%);
-        --secondary: hsl(220, 25%, 50%);
-        --secondary-dark: hsl(220, 25%, 40%);
-        --secondary-foreground: hsl(0, 0%, 100%);
-
-        --muted: hsl(222, 30%, 20%);
-        --muted-foreground: hsl(215, 16%, 55%);
-        --accent: hsl(135, 90%, 55%);
-        --accent-foreground: hsl(210, 20%, 90%);
-        --destructive: hsl(0, 84%, 70%);
-        --destructive-foreground: hsl(0, 0%, 100%);
-        --border: hsl(222, 30%, 25%);
-        --input: hsl(222, 30%, 25%);
-        --ring: hsl(145, 70%, 50%);
-      }
-      body {
-        font-family: var(--font-sans), system-ui, sans-serif;
-        -webkit-font-smoothing: antialiased;
-        -moz-osx-font-smoothing: grayscale;
-      }
-      
-      .btn-primary {
-        color: var(--primary-foreground);
-        font-weight: 600; /* NEW */
-        background: linear-gradient(
-          60deg, 
-          var(--primary), 
-          var(--primary-dark), 
-          var(--primary)
-        );
-        background-size: 300% 300%;
-        animation: gradient-animation 8s ease-in-out infinite;
-        transition: all 0.3s ease-in-out;
-      }
-      .dark .btn-primary {
-         color: var(--primary-foreground);
-      }
-      .btn-primary:hover {
-        transform: translateY(-4px) scale(1.05);
-        box-shadow: var(--shadow-xl);
-        filter: brightness(1.1); /* NEW */
-      }
-
-      /* --- Custom Form Input Style --- */
-      .form-input {
-        background-color: var(--background);
-        border: 1px solid var(--border);
-        color: var(--foreground);
-        border-radius: var(--radius);
-        padding: 0.6rem 1rem; /* NEW: Reduced padding */
-        font-size: 0.875rem;
-        transition: all 0.3s ease-in-out;
-        box-shadow: var(--shadow-sm);
-      }
-      .form-input:focus {
-        outline: none;
-        border-color: var(--primary);
-        box-shadow: 0 0 0 3px var(--primary-light);
-      }
-      .dark .form-input:focus {
-         box-shadow: 0 0 0 3px hsl(145, 70%, 45%, 0.3);
-      }
-      
-      /* --- Animated Gradient Background --- */
-      .animated-gradient-bg {
-        background: linear-gradient(
-          -45deg, 
-          hsl(145, 70%, 70%), /* NEW */
-          hsl(160, 80%, 60%), /* NEW */
-          hsl(180, 50%, 70%), /* NEW */
-          hsl(145, 70%, 70%) /* NEW */
-        );
-        background-size: 400% 400%;
-        animation: gradient-animation 15s ease-in-out infinite; /* Updated animation name */
-      }
-      .dark .animated-gradient-bg {
-         background: linear-gradient(
-          -45deg, 
-          hsl(145, 70%, 20%), /* NEW */
-          hsl(160, 80%, 15%), /* NEW */
-          hsl(180, 50%, 20%), /* NEW */
-          hsl(222, 30%, 12%)
-        );
-        background-size: 400% 400%;
-        animation: gradient-animation 15s ease-in-out infinite; /* Updated animation name */
-      }
-      
-      /* --- Glassmorphism Card --- */
-      .glass-card {
-        background: hsla(0, 0%, 100%, 0.6);
-        backdrop-filter: blur(20px);
-        -webkit-backdrop-filter: blur(20px);
-        border: 1px solid hsla(0, 0%, 100%, 0.2);
-        box-shadow: var(--shadow-2xl);
-      }
-      .dark .glass-card {
-         background: hsla(222, 30%, 15%, 0.6);
-         border: 1px solid hsla(222, 30%, 25%, 0.5);
-      }
-
-    </style>
-</head>
-<body class="animated-gradient-bg text-foreground flex items-center justify-center min-h-screen p-4">
+    <div class="aurora-bg"></div>
 
     <div class="w-full max-w-md p-8 md:p-10 rounded-2xl glass-card animate-fade-in-up">
         
@@ -177,7 +23,7 @@
                 ES
              </div>
             <h1 class="text-3xl font-bold text-foreground">Welcome Back!</h1>
-            <p class="text-muted-foreground text-sm mt-2">Login to your EduShare account</p>
+            <p class="text-muted-foreground text-sm mt-2">Share Notes. Get Better Grades.</p>
         </div>
 
         {# Display messages from other pages (like register) #}
@@ -216,7 +62,7 @@
                         maxlength="150" 
                         required 
                         id="id_username"
-                        class="form-input w-full"
+                        class="form-input"
                         placeholder="Enter your username"
                     >
                 </div>
@@ -228,7 +74,7 @@
                         autocomplete="current-password" 
                         required 
                         id="id_password"
-                        class="form-input w-full"
+                        class="form-input"
                         placeholder="Enter your password"
                     >
                 </div>

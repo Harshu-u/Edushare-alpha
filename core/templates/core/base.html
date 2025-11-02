@@ -6,8 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <title>{% block title %}Dashboard{% endblock %} - EduShare</title>
-
+    
     <link href="{% static 'css/output.css' %}" rel="stylesheet" />
+    
     <script src="https://unpkg.com/@yaireo/tagify"></script>
     <script src="https://unpkg.com/@yaireo/tagify/dist/tagify.polyfills.min.js"></script>
     <link href="https://unpkg.com/@yaireo/tagify/dist/tagify.css" rel="stylesheet" type="text/css" />
@@ -112,7 +113,7 @@
         background-size: 200% 200%;
         filter: blur(100px);
         opacity: 0.1; 
-        animation: aurora 60s linear infinite;
+        /* === animation: aurora 60s linear infinite; === REMOVED === */
       }
       .dark .aurora-bg {
         opacity: 0.15; 
@@ -130,7 +131,7 @@
         font-weight: 600; 
         background: linear-gradient( 60deg, var(--primary), var(--primary-dark), var(--primary));
         background-size: 300% 300%;
-        animation: gradient-animation 8s ease-in-out infinite;
+        /* === animation: gradient-animation 8s ease-in-out infinite; === REMOVED === */
         box-shadow: 0 0 20px 0px hsla(var(--primary-light), 0.4);
         transform: scale(1.03);
       }
@@ -142,7 +143,7 @@
         font-weight: 600;
         background: linear-gradient( 60deg, var(--primary), var(--primary-dark), var(--primary));
         background-size: 300% 300%;
-        animation: gradient-animation 8s ease-in-out infinite;
+        /* === animation: gradient-animation 8s ease-in-out infinite; === REMOVED === */
         transition: all 0.3s ease-in-out;
       }
       .dark .btn-primary { color: var(--primary-foreground); }
@@ -365,7 +366,8 @@
                 {% if user.is_authenticated %} 
                   {{ user.role|default:"User" }}
                 {% else %}
-                  Guest {% endif %}
+                  Guest
+                {% endif %}
               </p>
             </div>
           </div>
@@ -451,7 +453,6 @@
 
           </ul>
         </nav>
-        
         <div class="p-3 border-t border-border/50"> 
           {% if user.is_authenticated %}
             <form method="post" action="{% url 'logout' %}">
@@ -540,7 +541,8 @@
                     {{ user.first_name|first|upper }}{{ user.last_name|first|upper }} 
                   {% elif user.is_authenticated %} 
                     {{ user.username|first|upper }}
-                  {% else %} G {% endif %} </div>
+                  {% else %} G {% endif %}
+                </div>
                 <div class="text-sm hidden md:block">
                    <p class="text-sm font-medium text-foreground capitalize">
                      {% if user.is_authenticated %} 
